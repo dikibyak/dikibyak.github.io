@@ -1,0 +1,37 @@
+.wrapper {
+  font-size: 16px;
+  font-family: Verdana;
+  max-width: 1000px;
+  margin: auto;
+}
+
+pre > code {
+  margin: 8px 0;
+  padding: 4px;
+  display: block;
+  background: #f8f8ff;
+  border-radius: 3px;
+}
+
+body {
+  background: #e5e4e2;
+  color: #1a0011;
+}
+
+.menu li {
+  margin: 0;
+  padding: 0;
+}
+
+.menu {
+  border: 2px gray solid;
+  border-radius: 10px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: black;
+  display: block;
+  padding: 10px;
+  margin: 4px;
+}
