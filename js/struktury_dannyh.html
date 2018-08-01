@@ -2,12 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../files/css/master.css">
+    <link rel="stylesheet" href="files/css/master.css">
+    <script async src="files/js/main_script.js"></script>
   </head>
   <body>
     <div class="wrapper">
 
-      <div class="back"><a href="../index.html"><img src="https://png.icons8.com/flat_round/50/000000/back.png"></a></div>
+      <div class="menu"><ol>
+        <li><a href="osnovy_javascript.html">Основы JavaScript</a></li>
+        <li><a href="struktury_dannyh.html">Структуры данных</a></li>
+        <li><a href="zamykaniya,_oblast'_vidimosti.html">Замыкания, область видимости</a></li>
+        <li><a href="metody_obektov_i_kontekst_vyzova.html">Методы объектов и контекст вызова</a></li>
+        <li><a href="nekotorye_drugie_vozmozhnosti.html">Некоторые другие возможности</a></li>
+        <li><a href="oop_v_funkcional'nom_stile.html">ООП в функциональном стиле</a></li>
+        <li><a href="oop_v_prototipnom_stile.html">ООП в прототипном стиле</a></li>
+        <li><a href="example.html">Задачи</a></li>
+      </ol></div>
 
       <h1>Числа</h1><hr>
       <h2>Способы записи</h2>
@@ -17,63 +27,63 @@
       <p>Например, 1e3 – это 1 с 3 нулями, то есть 1000.</p>
       <p>Если количество нулей отрицательно, то число сдвигается вправо за десятичную точку, так что получается десятичная дробь</p>
       <h2>Деление на ноль, Infinity</h2>
-      <p>Infinity – особенное численное значение, которое ведет себя в точности как математическая бесконечность ∞.</p>
-      <p>Бесконечность можно присвоить и в явном виде: var x = Infinity.</p>
+      <p><code>Infinity</code> – особенное численное значение, которое ведет себя в точности как математическая бесконечность ∞.</p>
+      <p>Бесконечность можно присвоить и в явном виде: <code>var x = Infinity;</code></p>
       <h2>NaN</h2>
-      <p>Если математическая операция не может быть совершена, то возвращается специальное значение NaN (Not-A-Number).</p>
-      <p>Значение NaN – единственное в своем роде, которое не равно ничему, включая себя</p>
-      <p>Значение NaN можно проверить специальной функцией isNaN(n), которая преобразует аргумент к числу и возвращает true, если получилось NaN, и false – для любого другого значения.</p>
+      <p>Если математическая операция не может быть совершена, то возвращается специальное значение <code>NaN</code> (Not-A-Number).</p>
+      <p>Значение <code>NaN</code> – единственное в своем роде, которое не равно ничему, включая себя</p>
+      <p>Значение <code>NaN</code> можно проверить специальной функцией <code>isNaN(n)</code>, которая преобразует аргумент к числу и возвращает <code>true</code>, если получилось <code>NaN</code>, и <code>false</code> – для любого другого значения.</p>
       <h2>isFinite(n)</h2>
-      <p>Функция isFinite(n) преобразует аргумент к числу и возвращает true, если это не NaN/Infinity/-Infinity</p>
+      <p>Преобразует аргумент к числу и возвращает <code>true</code>, если это не <code>NaN/Infinity/-Infinity</code></p>
       <pre><code>alert( isFinite(1) ); // true
 alert( isFinite(Infinity) ); // false
 alert( isFinite(NaN) ); // false</code></pre>
       <h2>Мягкое преобразование: parseInt и parseFloat</h2>
-      <p>Функция parseInt и ее аналог parseFloat преобразуют строку символ за символом, пока это возможно.</p>
+      <p>Функция <code>parseInt</code> и ее аналог <code>parseFloat</code> преобразуют строку символ за символом, пока это возможно.</p>
       <pre><code>alert( parseInt('12px') ) // 12, ошибка на символе 'p'
 alert( parseFloat('12.3.4') ) // 12.3, ошибка на второй точке
 alert( parseInt('a123') ); // NaN</code></pre>
       <h2>Проверка на число</h2>
       <pre><code>function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+  return !isNaN( parseFloat(n) ) && isFinite(n);
 }</code></pre>
       <h2>toString(система счисления)</h2>
       <pre><code>var n = 255;
 alert( n.toString(16) ); // ff</code></pre>
       <p>При помощи такого кодирования можно «укоротить» длинный цифровой идентификатор, например чтобы выдать его в качестве URL.</p>
       <h2>Округление</h2>
-      <p><b>Math.floor</b> – округляет вниз</p>
-      <p><b>Math.ceil</b> – округляет вверх</p>
-      <p><b>Math.round</b> – округляет до ближайшего целого</p>
+      <p><code>Math.floor(n);</code> – округляет вниз</p>
+      <p><code>Math.ceil(n);</code> – округляет вверх</p>
+      <p><code>Math.round(n);</code> – округляет до ближайшего целого</p>
       <pre><code>alert( Math.floor(3.1) );  // 3
 alert( Math.ceil(3.1) );   // 4
 alert( Math.round(3.1) );  // 3</code></pre>
       <h2>num.toFixed(precision)</h2>
-      <p>Округляет число num до точности precision и возвращает результат в виде строки:</p>
+      <p>Округляет число <code>num</code> до точности <code>precision</code> и возвращает результат в виде строки:</p>
       <pre><code>var n = 12.34;
 alert( n.toFixed(1) ); // "12.3"</code></pre>
       <h2>Форматирование</h2>
-      <p>Для красивого вывода чисел в стандарте ECMA 402 есть метод toLocaleString():</p>
+      <p>Для красивого вывода чисел в стандарте ECMA 402 есть метод <code>toLocaleString()</code>:</p>
       <pre>var number = 123456789;
 alert( number.toLocaleString() ); // 123 456 789</pre>
       <h1>Строки</h1><hr>
       <h2>Экранирование специальных символов</h2>
       <pre><code>var str = ’I\’m a JS’; // Экранирование обратный слеш \</code></pre>
       <h2>Получение символа из строки:</h2>
-      <p>Чтобы получить символ, используйте вызов charAt(позиция). Первый символ имеет позицию 0:</p>
+      <p>Чтобы получить символ, используйте вызов <code>charAt(позиция)</code>. Первый символ имеет позицию 0:</p>
       <pre><code>var str = "Lorem ipsum dolor sit amet...";
 alert( str.charAt(0) ); // L</code></pre>
       <h2>Смена регистра</h2>
-      <p>Методы toLowerCase()и toUpperCase()меняют регистр строки на нижний/верхний:</p>
+      <p>Методы <code>toLowerCase()</code> и <code>toUpperCase()</code> меняют регистр строки на нижний/верхний:</p>
       <pre><code>alert( "Интерфейс".toUpperCase() );//ИНТЕРФЕЙС
 alert( "Интерфейс"[0].toLowerCase() );//'и'</code></pre>
       <h2>Поиск подстроки</h2>
-      <p>Для поиска подстроки есть метод indexOf(подстрока[, начальная_позиция]).</p>
+      <p>Для поиска подстроки есть метод <code>indexOf(подстрока[, начальная_позиция])</code>.</p>
       <p>Он возвращает позицию, на которой находится подстрока или -1, если ничего не найдено. Например:</p>
       <pre><code>var str = "Widget with id";
-alert(str.indexOf("id", 2)) // 12, поиск начат с позиции 2</code></pre>
+alert( str.indexOf("id", 2) ) // 12, поиск начат с позиции 2</code></pre>
       <h2>Поиск всех вхождений</h2>
-      <p>Чтобы найти все вхождения подстроки, нужно запустить indexOfв цикле. Как только получаем очередную позицию — начинаем следующий поиск со следующей.</p>
+      <p>Чтобы найти все вхождения подстроки, нужно запустить <code>indexOf</code> в цикле. Как только получаем очередную позицию – начинаем следующий поиск со следующей.</p>
       <pre><code>var str = "Ослик Иа-Иа посмотрел на виадук"; // ищем в этой строке
 var target = "Иа"; // цель поиска
 
@@ -87,22 +97,22 @@ while (true) {
 }</code></pre>
       <h2>Взятие подстроки: substr, substring, slice</h2>
       <h3>substring( start[, end] )</h3>
-      <p>Метод substring(start,end)возвращает подстроку с позиции startдо, но не включая end. Отрицательные аргументы интерпретируются как равные 0, но слишком длинные значения усекаются до длины строки. Если start > end, то аргументы меняются местами.</p>
+      <p>Метод <code>substring(start,end)</code> возвращает подстроку с позиции <code>start</code> до, но не включая <code>end</code>. Отрицательные аргументы интерпретируются как равные 0, но слишком длинные значения усекаются до длины строки. Если <code>start > end</code>, то аргументы меняются местами.</p>
       <pre><code>var str = "stringify";
 alert( str.substring(0,1) ); // "s", символы с позиции 0 по 1 не включая 1</code></pre>
       <h3>substr(start[, length])</h3>
-      <p>Возвращает подстроку с позиции start, второй аргумент содержит не конечную позицию, а количество символов.</p>
+      <p>Возвращает подстроку с позиции <code>start</code>, второй аргумент содержит не конечную позицию, а количество символов.</p>
       <pre><code>var str = "stringify";
 alert(str.substr(2,4)); // "ring", символы с позиции 0 по 1 не включая 1</code></pre>
       <h3>slice(start[, end])</h3>
-      <p>Возвращает подстроку с позиции start до, но не включая end. Отрицательные значения отсчитываются от конца строки.</p>
+      <p>Возвращает подстроку с позиции <code>start</code> до, но не включая <code>end</code>. Отрицательные значения отсчитываются от конца строки.</p>
       <pre><code>alert( "testme".slice(-2) ); // "me", от 2 позиции с конца</code></pre>
       <h2>Кодировка Юникод</h2>
       <h3>String.fromCharCode(code)</h3>
-      <p>Возвращает символ по коду code:</p>
+      <p>Возвращает символ по коду <code>code</code>:</p>
       <pre><code>alert(String.fromCharCode(1072)); // 'а'</code></pre>
       <h3>str.charCodeAt(pos)</h3>
-      <p>Возвращает код символа на позиции pos. Отсчет позиции начинается с нуля.</p>
+      <p>Возвращает код символа на позиции <code>pos</code>. Отсчет позиции начинается с нуля.</p>
       <pre><code>alert("абрикос".charCodeAt(0)); // 1072, код 'а'</code></pre>
       <h1>Объекты: перебор свойств</h1><hr>
       <h2>for..in</h2>
@@ -119,14 +129,14 @@ for (var key in menu) {
       <h1>Массивы с числовыми индексами</h1><hr>
       <h2>Методы pop/push, shift/unshift</h2>
       <h3>Конец массива</h3>
-      <p><b>arr.pop()</b> – удаляет последний элемент массива.</p>
+      <p><code>arr.pop()</code> – удаляет последний элемент массива.</p>
       <pre><code>var fruits = ["Яблоко", "Апельсин", "Груша"];
 alert( fruits.pop() ); // удалили "Груша"
 alert( fruits ); // Яблоко, Апельсин</code></pre>
-      <p><b>arr.push(value)</b> – добавляет value в конец массива.</p>
+      <p><code>arr.push(value)</code> – добавляет value в конец массива.</p>
       <h3>Начало массива</h3>
-      <p><b>arr.shift()</b> – удаляет первый элемент из массива.</p>
-      <p><b>arr.unshift(value)</b> – добавляет элемент value в начало массива.</p>
+      <p><code>arr.shift()</code> – удаляет первый элемент из массива.</p>
+      <p><code>arr.unshift(value)</code> – добавляет элемент value в начало массива.</p>
       <h1>Массивы: методы</h1><hr>
       <h2>Метод split</h2>
       <p>Превращает строку в массив, разбив её е по разделителю. Также есть 2й необязательный аргумент – ограничение на количество элементов в массиве. Если их больше, чем указано – остаток массива будет отброшен.</p>
@@ -136,19 +146,19 @@ for (var i = 0; i < arr.length; i++) {
   alert( 'Вам сообщение ' + arr[i] );
 }</code></pre>
       <h2>Метод join</h2>
-      <p>Вызов arr.join(str) делает в точности противоположное split. Он берет массив и склеивает его в строку, используя str как разделитель.</p>
+      <p>Вызов <code>arr.join(str)</code> делает в точности противоположное <code>split</code>. Он берет массив и склеивает его в строку, используя <code>str</code> как разделитель.</p>
       <pre><code>var arr = ['Маша', 'Петя', 'Марина', 'Василий'];
 var str = arr.join('; ');
 alert( str ); // Маша; Петя; Марина; Василий</code></pre>
       <h2>Метод splice</h2>
-      <p>Метод splice – это универсальный раскладной нож для работы с массивами. Умеет все: удалять элементы, вставлять элементы, заменять элементы – по очереди и одновременно.</p>
-      <p>arr.splice(index[, deleteCount, elem1, ..., elemN])</p>
-      <p>Удалить deleteCount элементов, начиная с номера index, а затем вставить elem1, ..., elemN на их место. Возвращает массив из удалённых элементов.</p>
+      <p>Метод <code>splice</code> – это универсальный раскладной нож для работы с массивами. Умеет все: удалять элементы, вставлять элементы, заменять элементы – по очереди и одновременно.</p>
+      <p><code>arr.splice(index[, deleteCount, elem1, ..., elemN])</code></p>
+      <p>Удалить <code>deleteCount</code> элементов, начиная с номера <code>index</code>, а затем вставить <code>elem1, ..., elemN</code> на их место. Возвращает массив из удалённых элементов.</p>
       <pre><code>var arr = ["Я", "изучаю", "JavaScript"];
 
 arr.splice(1, 1); // начиная с позиции 1, удалить 1 элемент
 alert( arr ); //  осталось ["Я", "JavaScript"]</code></pre>
-      <p>Метод splice также может вставлять элементы без удаления, для этого достаточно установить deleteCount в 0</p>
+      <p>Метод <code>splice</code> также может вставлять элементы без удаления, для этого достаточно установить <code>deleteCount</code> в 0</p>
       <pre><code>var arr = ["Я", "изучаю", "JavaScript"];
 
 arr.splice(2, 0, "сложный", "язык");
@@ -158,25 +168,25 @@ alert( arr ); // "Я", "изучаю", "сложный", "язык", "JavaScript
         <li>Можно использовать отрицательные индексы, они отсчитываются с конца.</li>
       </ul>
       <h2>Метод slice</h2>
-      <p>Метод slice(begin, end) копирует участок массива от begin до end, не включая end. Исходный массив при этом не меняется.</p>
+      <p>Метод <code>slice(begin, end)</code> копирует участок массива от <code>begin</code> до <code>end</code>, не включая end. Исходный массив при этом не меняется.</p>
       <pre><code>var arr = ["Почему", "надо", "учить", "JavaScript"];
 var arr2 = arr.slice(1, 3); // элементы 1, 2 (не включая 3)
 
 alert( arr2 ); // надо, учить</code></pre>
       <ul>
-        <li>Если не указать end – копирование будет до конца массива;</li>
+        <li>Если не указать <code>end</code> – копирование будет до конца массива;</li>
         <li>Можно использовать отрицательные индексы, они отсчитываются с конца;</li>
         <li>Если вообще не указать аргументов – скопируется весь массив.</li>
       </ul>
       <h2>Сортировка, метод sort(fn)</h2>
-      <p>Метод sort() сортирует массив на месте.</p>
+      <p>Метод <code>sort()</code> сортирует массив на месте.</p>
       <pre><code>var arr = [ 1, 2, 15 ];
 
 arr.sort();
 
 alert( arr );  // 1, 15, 2</code></pre>
       <h3>Свой порядок сортировки</h3>
-      <p>Для указания своего порядка сортировки в метод arr.sort(fn) нужно передать функцию fn от двух элементов, которая умеет сравнивать их.</p>
+      <p>Для указания своего порядка сортировки в метод <code>arr.sort(fn)</code> нужно передать функцию <code>fn</code> от двух элементов, которая умеет сравнивать их.</p>
       <pre><code>function compareNumeric(a, b) {
   if (a > b) return 1;
   if (a < b) return -1;
@@ -188,25 +198,25 @@ arr.sort(compareNumeric);
 
 alert(arr);  // 1, 2, 15</code></pre>
       <h2>reverse</h2>
-      <p>Метод arr.reverse() меняет порядок элементов в массиве на обратный.</p>
+      <p>Метод <code>arr.reverse()</code> меняет порядок элементов в массиве на обратный.</p>
       <pre><code>var arr = [1, 2, 3];
 arr.reverse();
 
 alert( arr ); // 3,2,1</code></pre>
       <h2>concat</h2>
-      <p>Метод arr.concat(value1, value2, … valueN) создаёт новый массив, в который копируются элементы из arr, а также value1, value2, ... valueN.</p>
+      <p>Метод <code>arr.concat(value1, value2, … valueN)</code> создаёт новый массив, в который копируются элементы из <code>arr</code>, а также <code>value1, value2, ... valueN</code>.</p>
       <pre><code>var arr = [1, 2];
 var newArr = arr.concat(3, 4);
 
 alert( newArr ); // 1,2,3,4</code></pre>
       <h2>indexOf/lastIndexOf</h2>
-      <p>Метод «arr.indexOf(searchElement[, fromIndex])» возвращает номер элемента searchElement в массиве arr или -1, если его нет. Поиск начинается с номера fromIndex, если он указан. Если нет – с начала массива.</p>
+      <p>Метод <code>arr.indexOf(searchElement[, fromIndex])</code> возвращает номер элемента <code>searchElement</code> в массиве <code>arr</code> или <code>-1</code>, если его нет. Поиск начинается с номера <code>fromIndex</code>, если он указан. Если нет – с начала массива.</p>
       <pre><code>var arr = [1, 0, false];
 
 alert( arr.indexOf(0) ); // 1
 alert( arr.indexOf(false) ); // 2
 alert( arr.indexOf(null) ); // -1</code></pre>
-      <p>Метод «arr.lastIndexOf(searchElement[, fromIndex])» ищет справа-налево: с конца массива или с номера fromIndex, если он указан.</p>
+      <p>Метод <code>arr.lastIndexOf(searchElement[, fromIndex])</code> ищет справа-налево: с конца массива или с номера <code>fromIndex</code>, если он указан.</p>
       <h2>Object.keys(obj)</h2>
       <p>Позволяет работать с объектом в виде массива.</p>
       <pre><code>var user = {
@@ -218,24 +228,24 @@ var keys = Object.keys(user);
 alert( keys ); // name, age</code></pre>
       <h1>Массив: перебирающие методы</h1><hr>
       <h2>forEach</h2>
-      <p>Метод «arr.forEach(callback[, thisArg])» используется для перебора массива.</p>
-      <p>Он для каждого элемента массива вызывает функцию callback.</p>
-      <p>Этой функции он передаёт три параметра callback(item, i, arr):</p>
+      <p>Метод <code>arr.forEach(callback[, thisArg])</code> используется для перебора массива.</p>
+      <p>Он для каждого элемента массива вызывает функцию <code>callback</code>.</p>
+      <p>Этой функции он передаёт три параметра <code>callback(item, i, arr)</code>:</p>
       <ul>
-        <li>item – очередной элемент массива;</li>
-        <li>i – его номер;</li>
-        <li>arr – массив, который перебирается.</li>
+        <li><code>item</code> – очередной элемент массива;</li>
+        <li><code>i</code> – его номер;</li>
+        <li><code>arr</code> – массив, который перебирается.</li>
       </ul>
       <pre><code>var arr = ["Яблоко", "Апельсин", "Груша"];
 
 arr.forEach(function(item, i, arr) {
   alert( i + ": " + item + " (массив:" + arr + ")" );
 });</code></pre>
-      <p>Второй, необязательный аргумент forEach позволяет указать контекст this для callback.</p>
+      <p>Второй, необязательный аргумент <code>forEach</code> позволяет указать контекст <code>this</code> для <code>callback</code>.</p>
       <p>Метод forEach ничего не возвращает, его используют только для перебора, как более «элегантный» вариант, чем обычный цикл for.</p>
       <h2>filter</h2>
-      <p>Метод «arr.filter(callback[, thisArg])» используется для фильтрации массива через функцию.</p>
-      <p>Он создаёт новый массив, в который войдут только те элементы arr, для которых вызов callback(item, i, arr) возвратит true.</p>
+      <p>Метод <code>arr.filter(callback[, thisArg])</code> используется для фильтрации массива через функцию.</p>
+      <p>Он создаёт новый массив, в который войдут только те элементы <code>arr</code>, для которых вызов <code>callback(item, i, arr)</code> возвратит <code>true</code>.</p>
       <pre><code>var arr = [1, -1, 2, -2, 3];
 
 var positiveArr = arr.filter(function(number) {
@@ -244,8 +254,8 @@ var positiveArr = arr.filter(function(number) {
 
 alert( positiveArr ); // 1,2,3</code></pre>
       <h2>map</h2>
-      <p>Метод «arr.map(callback[, thisArg])» используется для трансформации массива.</p>
-      <p>Он создаёт новый массив, который будет состоять из результатов вызова callback(item, i, arr) для каждого элемента arr.</p>
+      <p>Метод <code>arr.map(callback[, thisArg])</code> используется для трансформации массива.</p>
+      <p>Он создаёт новый массив, который будет состоять из результатов вызова <code>callback(item, i, arr)</code> для каждого элемента <code>arr</code>.</p>
       <pre><code>var names = ['HTML', 'CSS', 'JavaScript'];
 
 var nameLengths = names.map(function(name) {
@@ -256,8 +266,8 @@ var nameLengths = names.map(function(name) {
 alert( nameLengths ); // 4,3,10</code></pre>
       <h2>every/some</h2>
       <ul>
-        <li>Метод «arr.every(callback[, thisArg])» возвращает true, если вызов callback вернёт true для каждого элемента arr.</li>
-        <li>Метод «arr.some(callback[, thisArg])» возвращает true, если вызов callback вернёт true для какого-нибудь элемента arr.</li>
+        <li>Метод <code>arr.every(callback[, thisArg])</code> возвращает <code>true</code>, если вызов <code>callback</code> вернёт <code>true</code> для каждого элемента <code>arr</code>;</li>
+        <li>Метод <code>arr.some(callback[, thisArg])</code> возвращает <code>true</code>, если вызов <code>callback</code> вернёт <code>true</code> для какого-нибудь элемента <code>arr</code>.</li>
       </ul>
       <pre><code>var arr = [1, -1, 2, -2, 3];
 
@@ -268,15 +278,15 @@ function isPositive(number) {
 alert( arr.every(isPositive) ); // false, не все положительные
 alert( arr.some(isPositive) ); // true, есть хоть одно положительное</code></pre>
       <h2>reduce/reduceRight</h2>
-      <p>Метод «arr.reduce(callback[, initialValue])» используется для последовательной обработки каждого элемента массива с сохранением промежуточного результата.</p>
-      <p>Аргументы функции callback(previousValue, currentItem, index, arr):</p>
+      <p>Метод <code>arr.reduce(callback[, initialValue])</code> используется для последовательной обработки каждого элемента массива с сохранением промежуточного результата.</p>
+      <p>Аргументы функции <code>callback(previousValue, currentItem, index, arr)</code>:</p>
       <ul>
-        <li>previousValue – последний результат вызова функции, он же «промежуточный результат»;</li>
-        <li>currentItem – текущий элемент массива, элементы перебираются по очереди слева-направо;</li>
-        <li>index – номер текущего элемента;</li>
-        <li>arr – обрабатываемый массив.</li>
+        <li><code>previousValue</code> – последний результат вызова функции, он же «промежуточный результат»;</li>
+        <li><code>currentItem</code> – текущий элемент массива, элементы перебираются по очереди слева-направо;</li>
+        <li><code>index</code> – номер текущего элемента;</li>
+        <li><code>arr</code> – обрабатываемый массив.</li>
       </ul>
-      <p>Кроме callback, методу можно передать «начальное значение» – аргумент initialValue. Если он есть, то на первом вызове значение previousValue будет равно initialValue, а если у reduce нет второго аргумента, то оно равно первому элементу массива, а перебор начинается со второго.</p>
+      <p>Кроме <code>callback</code>, методу можно передать "начальное значение" – аргумент <code>initialValue</code>. Если он есть, то на первом вызове значение <code>previousValue</code> будет равно <code>initialValue</code>, а если у reduce нет второго аргумента, то оно равно первому элементу массива, а перебор начинается со второго.</p>
       <pre><code>var arr = [1, 2, 3, 4, 5]
 
 // для каждого элемента массива запустить функцию,

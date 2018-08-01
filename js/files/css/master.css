@@ -18,20 +18,19 @@ body {
   color: #1a0011;
 }
 
-.menu li {
+.menu * {
   margin: 0;
   padding: 0;
-}
-
-.menu {
-  border: 2px gray solid;
-  border-radius: 10px;
+  list-style-type: none;
 }
 
 .menu a {
   text-decoration: none;
   color: black;
   display: block;
-  padding: 10px;
-  margin: 4px;
+  padding: 12px;
+}
+
+.menu a:hover {
+  background: #c2bfba
 }
