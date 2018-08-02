@@ -3,6 +3,7 @@ body {
   margin: 0;
   background: url(../img/bg.gif) fixed;
   color: #1a0011;
+  overflow-y: scroll;
 }
 
 body * {
