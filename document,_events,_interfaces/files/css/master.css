@@ -12,7 +12,7 @@ body * {
 }
 
 .wrapper {
-  /*min-height: 100vh;*/
+  min-height: 100vh;
   border-right: 2px solid gray;
   border-left: 2px solid gray;
   font-size: 16px;
@@ -26,14 +26,18 @@ body * {
 
 pre { background: #f2f2f2 }
 
-p,h1,h2,h3,pre,img { padding: 8px 10px }
+p,h1,h2,h3,h4,pre,img,table { padding: 8px 10px }
 
-ol, ul { padding: 8px 30px }
+th, tr, td { padding: 4px }
 
-img { 
+th { text-align:left }
+
+ol,ul { padding: 8px 30px }
+
+img {
   padding: 0;
   margin: 8px 10px;
-  border: 2px solid gray 
+  border: 2px solid gray
 }
 
 .menu * {
