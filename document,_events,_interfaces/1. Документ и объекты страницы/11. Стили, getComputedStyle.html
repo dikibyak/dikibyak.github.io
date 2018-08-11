@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../files/css/master.css">
+    <script async src="../files/js/main_script.js"></script>
+    <title>Стили, getComputedStyle</title>
+  </head>
+  <body>
+<div class="wrapper">
+
+<div class="back"><a href="../index.html">&lt;</a></div>
+<h2>Стили элемента: свойство style</h2>
+<p>Свойство <code>element.style</code> возвращает объект, который дает доступ к стилю элемента на чтение и запись.</p>
+<p>Для свойств, названия которых состоят из нескольких слов, используется вотТакаяЗапись:</p>
+<pre><code>background-color  => elem.style.backgroundColor
+z-index           => elem.style.zIndex
+border-left-width => elem.style.borderLeftWidth</code></pre>
+<p>То есть, каждый дефис даёт большую букву.</p>
+<h2>Строка стилей style.cssText</h2>
+<p>Свойство <code>style.cssText</code> позволяет поставить стиль целиком в виде строки.</p>
+<pre><code>&lt;div>Button&lt;/div>
+
+&lt;script>
+  var div = document.body.children[0];
+
+  div.style.cssText="color: red !important; \
+    background-color: yellow; \
+    width: 100px; \
+    text-align: center; \
+    blabla: 5; \
+  ";
+
+  alert(div.style.cssText);
+&lt;/script></code></pre>
+<p><code>style.cssText</code> осуществляет полную перезапись <code>style</code>. Если же нужно заменить какое-то конкретно свойство стиля, то обращаются именно к нему: <code>style.color</code>, <code>style.width</code> и т.п, чтобы не затереть что-то важное по ошибке.</p>
+<h2>Чтение стиля из style</h2>
+<p>Свойство <code>style</code> содержит лишь тот стиль, который указан в атрибуте элемента, без учёта каскада CSS.</p>
+<h2>Полный стиль из getComputedStyle</h2>
+<p>Итак, свойство <code>style</code> дает доступ только к той информации, которая хранится в <code>elem.style</code>.</p>
+<p>Для того, чтобы получить текущее используемое значение свойства, используется метод <code>window.getComputedStyle</code>, описанный в стандарте DOM Level 2.</p>
+<p>Его синтаксис таков:</p>
+<pre><code>getComputedStyle(element[, pseudo])</code></pre>
+<ul>
+	<li>element – элемент, значения для которого нужно получить.</li>
+	<li>pseudo – указывается, если нужен стиль псевдо-элемента, например "::before". Пустая строка или отсутствие аргумента означают сам элемент.</li>
+</ul>
+<pre><code>&lt;style>
+  body {
+    margin: 10px
+  }
+&lt;/style>
+
+&lt;body>
+
+  &lt;script>
+    var computedStyle = getComputedStyle(document.body);
+    alert( computedStyle.marginTop ); // выведет отступ в пикселях
+    alert( computedStyle.color ); // выведет цвет
+  &lt;/script>
+
+&lt;/body></code></pre>
+<p>Для правильного получения значения нужно указать точное свойство. Например: <code>paddingLeft</code>, <code>marginTop</code>, <code>borderLeftWidth</code>.</p>
+<h2>currentStyle для IE8-</h2>
+<p>В IE8- нет <code>getComputedStyle</code>, но у элементов есть свойство <code>currentStyle</code>, которое возвращает вычисленное (computed) значение: уже с учётом CSS-каскада, но не всегда в окончательном формате.</p>
+<p>Чтобы код работал и в старых и новых браузерах, обычно пишут кросс-браузерный код, наподобие такого:</p>
+<pre><code>function getStyle(elem) {
+  return window.getComputedStyle ? getComputedStyle(elem, "") : elem.currentStyle;
+}</code></pre>
+
+</div>
+  </body>
+</html>

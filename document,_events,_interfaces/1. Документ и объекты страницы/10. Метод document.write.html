@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../files/css/master.css">
+    <script async src="../files/js/main_script.js"></script>
+    <title>Метод document.write</title>
+  </head>
+  <body>
+<div class="wrapper">
+
+<div class="back"><a href="../index.html">&lt;</a></div>
+<p>Метод <code>document.write</code> – один из наиболее древних методов добавления текста к документу.</p>
+<h2>Как работает document.write</h2>
+<p>Метод <code>document.write(str)</code> работает только пока HTML-страница находится в процессе загрузки. Он дописывает текст в текущее место HTML ещё до того, как браузер построит из него DOM.</p>
+<p>HTML-документ ниже будет содержать <code>1 2 3</code>.</p>
+<pre><code>&lt;body>
+  1
+  &lt;script>
+    document.write(2);
+  &lt;/script>
+  3
+&lt;/body></code></pre>
+<p>Строка просто пишется в HTML-документ без проверки структуры тегов, как будто она всегда там была.</p>
+<h2>Только до конца загрузки</h2>
+<p>Методы <code>document.write</code> и <code>document.writeln</code> пишут напрямую в текст документа, до того как браузер построит из него DOM, поэтому они могут записать в документ все, что угодно, любые стили и незакрытые теги.</p>
+<h2>Преимущества перед innerHTML</h2>
+<ul>
+	<li>Метод <code>document.write</code> работает быстрее, фактически это самый быстрый способ добавить на страницу текст, сгенерированный скриптом.</li>
+	<li>Метод <code>document.write</code> вставляет любой текст на страницу «как есть», в то время как <code>innerHTML</code> может вписать лишь валидный HTML (при попытке подсунуть невалидный – браузер скорректирует его).</li>
+</ul>
+
+</div>
+  </body>
+</html>
