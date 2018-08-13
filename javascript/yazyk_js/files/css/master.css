@@ -1,22 +1,48 @@
+body {
+  padding: 0;
+  margin: 0;
+  background: url(../img/bg.gif) fixed;
+  color: #1a0011;
+  overflow-y: scroll;
+}
+
+body * {
+  margin: 0;
+  padding: 0;
+}
+
 .wrapper {
+  min-height: 100vh;
+  border-right: 2px solid gray;
+  border-left: 2px solid gray;
   font-size: 16px;
   font-family: Verdana;
-  max-width: 1000px;
-  margin: auto;
-}
-
-
-pre > code {
-  margin: 8px 0;
-  padding: 4px;
-  display: block;
+  max-width: 1500px;
   background: #f8f8ff;
-  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  color: #05141a;
+  margin: 0 auto;
 }
 
-body {
-  background: #e5e4e2;
-  color: #1a0011;
+pre { background: #f2f2f2 }
+
+p,h1,h2,h3,h4,pre,img,table,b { padding: 8px 10px }
+
+th, tr, td { padding: 4px }
+
+th { text-align:left }
+
+ol,ul { padding: 8px 30px }
+
+li {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+img {
+  padding: 0;
+  margin: 8px 10px;
+  border: 2px solid gray
 }
 
 .menu * {
@@ -25,13 +51,11 @@ body {
   list-style-type: none;
 }
 
-.menu a {
+.menu a, .back a {
   text-decoration: none;
   color: black;
   display: block;
   padding: 12px;
 }
 
-.menu a:hover {
-  background: #c2bfba
-}
+.menu a:hover, .back a:hover { background: #c2bfba }
