@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../files/css/master.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      
+<div class="back"><a href="index.html">&lt;</a></div>
+
+<h1>Типы данных [[Class]], instanceof и утки</h1><hr>
+<h2>Оператор typeof</h2>
+<p>Оператор <code>typeof</code> надежно работает с примитивными типами, кроме <code>null</code>, а также с функциями. Он возвращает для них тип в виде строки:</p>
+<pre><code>alert( typeof 1 );         // 'number'
+alert( typeof true );      // 'boolean'
+alert( typeof "Текст" );   // 'string'
+alert( typeof undefined ); // 'undefined'
+alert( typeof null );      // 'object' (ошибка в языке)
+alert( typeof alert );     // 'function'
+alert( typeof {} );        // 'object'
+alert( typeof [] );        // 'object'
+alert( typeof new Date );  // 'object'</code></pre>
+<h2>Секретное свойство [[Class]]</h2>
+<p>Во всех встроенных объектах есть специальное свойство <code>[[Class]]</code>, в котором хранится информация о его типе или конструкторе.</p>
+<p>Оно взято в квадратные скобки, так как это свойство – внутреннее. Явно получить его нельзя, но можно прочитать его «в обход», воспользовавшись методом <code>toString</code> стандартного объекта <code>Object</code>.</p>
+<pre><code>var toString = {}.toString;
+
+var arr = [1, 2];
+alert( toString.call(arr) ); // [object Array]
+
+var date = new Date;
+alert( toString.call(date) ); // [object Date]
+
+var user = { name: "Вася" };
+alert( toString.call(user) ); // [object Object]</code></pre>
+<p>Для получения <code>[[Class]]</code> нужна именно внутренняя реализация <code>toString</code> стандартного объекта <code>Object</code>, другая не подойдёт.</p>
+<p>Метод также можно использовать с примитивами:</p>
+<pre><code>alert( {}.toString.call(123) ); // [object Number]
+alert( {}.toString.call("строка") ); // [object String]</code></pre>
+<h2>Метод Array.isArray()</h2>
+<p>Для проверки типа на массив есть специальный метод: <code>Array.isArray(arr)</code>. Он возвращает <code>true</code> только если <code>arr</code> – массив:</p>
+<pre><code>alert( Array.isArray([1,2,3]) ); // true
+alert( Array.isArray("not array")); // false</code></pre>
+<h2>Оператор instanceof</h2>
+<p>Оператор <code>instanceof</code> позволяет проверить, создан ли объект данной функцией, причём работает для любых функций – как встроенных, так и наших.</p>
+<pre><code>function User() {}
+
+var user = new User();
+
+alert( user instanceof User ); // true</code></pre>
+<h2>Утиная типизация</h2>
+<p>Смысл утиной типизации – в проверке необходимых методов и свойств.</p>
+<p>Например, мы можем проверить, что объект – массив, не вызывая <code>Array.isArray</code>, а просто уточнив наличие важного для нас метода, например <code>splice</code>:</p>
+<pre><code>var something = [1, 2, 3];
+
+if (something.splice) {
+  alert( 'Это утка! То есть, массив!' );
+}</code></pre>
+<h2>Пример полиморфной функции</h2>
+<p>Пример полиморфной функции – <code>sayHi(who)</code>, которая будет говорить «Привет» своему аргументу, причём если передан массив – то «Привет» каждому:</p>
+<pre><code>function sayHi(who) {
+  if (Array.isArray(who)) {
+    who.forEach(sayHi);
+  } else {
+    alert( 'Привет, ' + who );
+  }
+}
+
+// Вызов с примитивным аргументом
+sayHi("Вася"); // Привет, Вася
+
+// Вызов с массивом
+sayHi(["Саша", "Петя"]); // Привет, Саша... Петя
+
+// Вызов с вложенными массивами - тоже работает!
+sayHi(["Саша", "Петя", ["Маша", "Юля"]]); // Привет Саша..Петя..Маша..Юля</code></pre>
+<p>Проверку на массив в этом примере можно заменить на «утиную» – нам ведь нужен только метод forEach:</p>
+<pre><code>function sayHi(who) {
+  if (who.forEach) {  // если есть forEach
+    who.forEach(sayHi); // предполагаем, что он ведёт себя "как надо"
+  } else {
+    alert( 'Привет, ' + who );
+  }
+}</code></pre>
+<h1>Формат JSON, метод toJSON</h1><hr>
+<h2>Формат JSON</h2>
+<p>Если нужно с сервера взять объект с данными и передать его клиенту, то в качестве промежуточного формата – для передачи по сети, почти всегда используют именно его.</p>
+<p>Основные методы для работы с JSON в JavaScript – это:</p>
+<ul>
+  <li><code>JSON.parse</code> – читает объекты из строки в формате JSON;</li>
+  <li><code>JSON.stringify</code> – превращает объекты в строку в формате JSON, используется, когда нужно из JavaScript передать данные по сети.</li>
+</ul>
+<h2>Метод JSON.parse</h2>
+<p>Вызов <code>JSON.parse(str)</code> превратит строку с данными в формате JSON в JavaScript-объект/массив/значение.</p>
+<pre><code>var numbers = "[0, 1, 2, 3]";
+
+numbers = JSON.parse(numbers);
+
+alert( numbers[1] ); // 1</code></pre>
+<pre><code>var user = '{ "name": "Вася", "age": 35, "isAdmin": false, "friends": [0,1,2,3] }';
+
+user = JSON.parse(user);
+
+alert( user.friends[1] ); // 1</code></pre>
+<h2>Умный разбор: JSON.parse(str, reviver)</h2>
+<p>Для интеллектуального восстановления из строки у <code>JSON.parse(str, reviver)</code> есть второй параметр <code>reviver</code>, который является функцией <code>function(key, value)</code>.</p>
+<pre><code>// дата в строке - в формате UTC
+var str = '{"title":"Конференция","date":"2014-11-30T12:00:00.000Z"}';
+
+var event = JSON.parse(str, function(key, value) {
+  if (key == 'date') return new Date(value);
+  return value;
+});
+
+alert( event.date.getDate() );</code></pre>
+<h2>Сериализация, метод JSON.stringify</h2>
+<p>Метод <code>JSON.stringify(value, replacer, space)</code> преобразует («сериализует») значение в JSON-строку</p>
+<pre><code>var event = {
+  title: "Конференция",
+  date: "сегодня"
+};
+
+var str = JSON.stringify(event);
+alert( str ); // {"title":"Конференция","date":"сегодня"}
+
+// Обратное преобразование.
+event = JSON.parse(str);</code></pre>
+<p>При сериализации объекта вызывается его метод <code>toJSON</code>. Если такого метода нет – перечисляются его свойства, кроме функций.</p>
+<pre><code>var room = {
+  number: 23,
+  toJSON: function() {
+      return this.number;
+    }
+};
+
+alert( JSON.stringify(room) ); // 23</code></pre>
+<h2>Исключение свойств</h2>
+<p>Во втором параметре <code>JSON.stringify(value, replacer)</code> можно указать массив свойств, которые подлежат сериализации.</p>
+<pre><code>var user = {
+  name: "Вася",
+  age: 25,
+  window: window
+};
+
+alert( JSON.stringify(user, ["name", "age"]) );
+// {"name":"Вася","age":25}</code></pre>
+<p>Для более сложных ситуаций вторым параметром можно передать функцию <code>function(key, value)</code>, которая возвращает сериализованное <code>value</code> либо <code>undefined</code>, если его не нужно включать в результат:</p>
+<pre><code>var user = {
+  name: "Вася",
+  age: 25,
+  window: window
+};
+
+var str = JSON.stringify(user, function(key, value) {
+  if (key == 'window') return undefined;
+  return value;
+});
+
+alert( str ); // {"name":"Вася","age":25}</code></pre>
+<p>В методе <code>JSON.stringify(value, replacer, space)</code> есть ещё третий параметр <code>space</code>.</p>
+<p>Если он является числом – то уровни вложенности в JSON оформляются указанным количеством пробелов, если строкой – вставляется эта строка.</p>
+<pre><code>var user = {
+  name: "Вася",
+  age: 25,
+  roles: {
+    isAdmin: false,
+    isEditor: true
+  }
+};
+
+var str = JSON.stringify(user, "", 4);
+
+alert( str );
+/* Результат -- красиво сериализованный объект:
+{
+    "name": "Вася",
+    "age": 25,
+    "roles": {
+        "isAdmin": false,
+        "isEditor": true
+    }
+}
+*/</code></pre>
+<h1>setTimeout и setInterval</h1><hr>
+<h2>setTimeout</h2>
+<pre><code>var timerId = setTimeout(func / code, delay[, arg1, arg2...])</code></pre>
+<ul>
+  <li><code>func/code</code> - функция или строка кода для исполнения. Строка поддерживается для совместимости, использовать её не рекомендуется;</li>
+  <li><code>delay</code> - задержка в миллисекундах, 1000 миллисекунд равны 1 секунде.</li>
+  <li><code>arg1, arg2…</code> - аргументы, которые нужно передать функции. Не поддерживаются в IE9-.</li>
+</ul>
+<p>Следующий код вызовет func() через одну секунду:</p>
+<pre><code>function func(phrase, who) {
+  alert( phrase + ', ' + who );
+}
+
+setTimeout(func, 1000, "Привет", "Вася"); // Привет, Вася</code> </pre>
+<p>Если первый аргумент является строкой, то интерпретатор создаёт анонимную функцию из этой строки.</p>
+<pre><code>setTimeout("alert('Привет')", 1000);</code></pre>
+<p>Вместо строки используйте анонимные функции, вот так:</p>
+<pre><code>setTimeout(function() { alert('Привет') }, 1000);</code></pre>
+<h2>Отмена исполнения clearTimeout</h2>
+<p>Функция <code>setTimeout</code> возвращает числовой идентификатор таймера <code>timerId</code>, который можно использовать для отмены действия.</p>
+<pre><code>var timerId = setTimeout(...);
+clearTimeout(timerId);</code></pre>
+<h2>setInterval</h2>
+<pre><code>var timerId = setInterval(func / code, delay[, arg1, arg2...])</code></pre>
+<p>Смысл аргументов – тот же самый. Но, в отличие от <code>setTimeout</code>, он запускает выполнение функции не один раз, а регулярно повторяет её через указанный интервал времени. Остановить исполнение можно вызовом <code>clearInterval(timerId)</code>.</p>
+<pre><code>// начать повторы с интервалом 2 сек
+var timerId = setInterval(function() {
+  alert( "тик" );
+}, 2000);
+
+// через 5 сек остановить повторы
+setTimeout(function() {
+  clearInterval(timerId);
+  alert( 'стоп' );
+}, 5000);</code></pre>
+<h2>Рекурсивный setTimeout</h2>
+<p>Рекурсивный <code>setTimeout</code> – более гибкий метод тайминга, чем <code>setInterval</code>, так как время до следующего выполнения можно запланировать по-разному, в зависимости от результатов текущего.</p>
+<p>Рекурсивный <code>setTimeout</code> гарантирует паузу между вызовами, <code>setInterval</code> – нет.</p>
+<pre><code>/* вместо:
+var timerId = setInterval(function() {
+  alert( "тик" );
+}, 2000);
+*/
+
+var timerId = setTimeout(function tick() {
+  alert( "тик" );
+  timerId = setTimeout(tick, 2000);
+}, 2000);</code></pre>
+<h2>Минимальная задержка таймера</h2>
+<p>По стандарту, минимальная задержка составляет 4 мс. Так что нет разницы между <code>setTimeout(..,1)</code> и <code>setTimeout(..,4)</code>.</p>
+<h2>Разбивка долгих скриптов</h2>
+<p>Нулевой или небольшой таймаут также используют, чтобы разорвать поток выполнения «тяжелых» скриптов.</p>
+<h1>Запуск кода из строки eval</h1><hr>
+<p>Функция <code>eval(code)</code> позволяет выполнить код, переданный ей в виде строки.</p>
+<h2>Использование eval</h2>
+<pre><code>var a = 1;
+
+(function() {
+  var a = 2;
+
+  eval(' alert(a) '); // 2
+})()</code></pre>
+<p>Вызов eval возвращает последнее вычисленное выражение.</p>
+<pre><code>alert( eval('1+1') ); // 2</code></pre>
+<p>При вызове eval имеет полный доступ к локальным переменным.</p>
+<pre><code>var x = 5;
+eval(" alert( x ); x = 10"); // 5, доступ к старому значению
+alert( x ); // 10, значение изменено внутри eval
+</code></pre>
+<h2>Внешние данные через new Function</h2>
+<p>Существует отличная альтернатива <code>eval</code>, которая позволяет корректно взаимодействовать с внешним кодом: <code>new Function</code>.</p>
+<p>Вызов <code>new Function('a,b', '..тело..')</code> создает функцию с указанными аргументами <code>a, b</code> и телом.</p>
+<pre><code>var a = 2, b = 3;
+
+// вместо обращения к a,b через eval
+// будем принимать их как аргументы динамически созданной функции
+var mul = new Function('a, b', ' return a * b;');
+
+alert( mul(a, b) ); // 6</code></pre>
+<h1>Перехват ошибок, "try..catch"</h1><hr>
+<h2>Конструкция try…catch</h2>
+<pre><code>try {
+  alert('Начало блока try');
+
+  lalala; // ошибка, переменная не определена!
+
+  alert('Конец блока try');
+} catch(e) {
+  alert('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+}
+
+alert("Потом код продолжит выполнение...");</code></pre>
+<h2>Объект ошибки</h2>
+<p>В примере выше мы видим объект ошибки. У него есть три основных свойства:</p>
+<ul>
+  <li><code>name</code> – тип ошибки. Например, при обращении к несуществующей переменной: "ReferenceError";</li>
+  <li><code>message</code> – текстовое сообщение о деталях ошибкиж;</li>
+  <li><code>stack</code> – Везде, кроме IE8-, есть также свойство stack, которое содержит строку с информацией о последовательности вызовов, которая привела к ошибке.</li>
+</ul>
+<h2>Генерация своих ошибок</h2>
+<h3>Оператор throw</h3>
+<p>Оператор <code>throw</code> генерирует ошибку.</p>
+<p>В качестве конструктора ошибок можно использовать встроенный конструктор: <code>new Error(message)</code> или любой другой.</p>
+<pre><code>var data = '{ "age": 30 }'; // данные неполны
+
+try {
+  var user = JSON.parse(data); // выполнится без ошибок
+
+  if (!user.name) {
+    throw new SyntaxError("Данные некорректны");
+  }
+  alert( user.name );
+
+} catch (e) {
+  alert( "Извините, в данных ошибка" );
+}</code></pre>
+<h2>Оборачивание исключений</h2>
+<pre><code>function ReadError(message, cause) {
+  this.message = message;
+  this.cause = cause;
+  this.name = 'ReadError';
+  this.stack = cause.stack;
+}
+
+function readData() {
+  var data = '{ bad data }';
+
+  try {
+    // ...
+    JSON.parse(data);
+    // ...
+  } catch (e) {
+    // ...
+    if (e.name == 'URIError') {
+      throw new ReadError("Ошибка в URI", e);
+    } else if (e.name == 'SyntaxError') {
+      throw new ReadError("Синтаксическая ошибка в данных", e);
+    } else {
+      throw e; // пробрасываем
+    }
+  }
+}
+
+try {
+  readData();
+} catch (e) {
+  if (e.name == 'ReadError') {
+    alert( e.message );
+    alert( e.cause ); // оригинальная ошибка-причина
+  } else {
+    throw e;
+  }
+}</code></pre>
+<p>Этот подход называют «оборачиванием» исключения, поскольку мы берём ошибки «более низкого уровня» и «заворачиваем» их в <code>ReadError</code>, которая соответствует текущей задаче.</p>
+<h2>Секция finally</h2>
+<p>Секцию <code>finally</code> используют, чтобы завершить начатые операции при любом варианте развития событий.</p>
+<pre><code>try {
+   .. пробуем выполнить код ..
+} catch(e) {
+   .. перехватываем исключение ..
+} finally {
+   .. выполняем всегда ..
+}</code></pre>
+
+    </div>
+  </body>
+</html>

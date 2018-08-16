@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../files/css/master.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      
+<div class="back"><a href="index.html">&lt;</a></div>
+
+      <h1>Методы объектов, this</h1><hr>
+      <h2>Доступ к объекту через this</h2>
+      <p>Для доступа к текущему объекту из метода используется ключевое слово this.</p>
+      <pre><code>var user = {
+  name: 'Василий',
+
+  sayHi: function() {
+    alert(this.name);
+  }
+};
+
+user.sayHi(); // sayHi в контексте user</code></pre>
+      <p>Через this метод может не только обратиться к любому свойству объекта, но и передать куда-то ссылку на сам объект целиком:</p>
+      <pre><code>var user = {
+  name: 'Василий',
+
+  sayHi: function() {
+    showName(this); // передать текущий объект в showName
+  }
+};
+
+function showName(namedObj) {
+  alert(namedObj.name);
+}
+
+user.sayHi(); // Василий</code></pre>
+      <h2>Подробнее про this</h2>
+      <p>Значение this называется контекстом вызова и будет определено в момент вызова функции.</p>
+      <p>Если одну и ту же функцию запускать в контексте разных объектов, она будет получать разный this:</p>
+      <pre><code>var user = { firstName: "Вася" };
+var admin = { firstName: "Админ" };
+
+function func() {
+  alert(this.firstName);
+}
+
+user.f = func;
+admin.g = func;
+
+// this равен объекту перед точкой:
+user.f(); // Вася
+admin.g(); // Админ
+admin['g'](); // Админ (не важно, доступ к объекту через точку или квадратные скобки)</code></pre>
+      <h2>Значение this при вызове без контекста</h2>
+      <pre><code>function func() {
+  alert( this ); // выведет [object Window] или [object global]
+}
+
+func();</code></pre>
+      <p>В режиме use strict вместо глобального объекта this будет undefined:</p>
+      <pre><code>function func() {
+  "use strict";
+  alert(this); // выведет undefined (кроме IE9-)
+}
+
+func();</code></pre>
+      <h2>Ссылочный тип</h2>
+      <p>Контекст this никак не привязан к функции, даже если она создана в объявлении объекта. Чтобы this передался, нужно вызвать функцию именно через точку (или квадратные скобки).</p>
+      <h1>Преобразование объектов: toString и valueOf</h1><hr>
+      <h2>Строковое преобразование</h2>
+      <p>Если в объекте присутствует метод toString, который возвращает примитив, то он используется для преобразования.</p>
+      <pre><code>var user = {
+  firstName: 'Василий',
+
+  toString: function() {
+    return 'Пользователь ' + this.firstName;
+  }
+};
+
+alert(user);  // Пользователь Василий</code></pre>
+      <h2>Численное преобразование</h2>
+      <p>Для численного преобразования объекта используется метод valueOf, а если его нет – то toString:</p>
+      <pre><code>var room = {
+  number: 777,
+
+  valueOf: function() { return this.number; },
+  toString: function() { return this.number; }
+};
+
+alert( +room );  // 777, вызвался valueOf
+delete room.valueOf; // valueOf удалён
+alert( +room );  // 777, вызвался toString</code></pre>
+      <h1>Создание объектов через "new"</h1><hr>
+      <h2>Конструктор</h2>
+      <p>Конструктором становится любая функция, вызванная через new.</p>
+      <pre><code>function Animal(name) {
+  this.name = name;
+  this.canWalk = true;
+}
+
+var animal = new Animal("ёжик");</code></pre>
+      <p>Детальнее – функция, запущенная через new, делает следующее:</p>
+      <ol>
+        <li>Создаётся новый пустой объект;</li>
+        <li>Ключевое слово this получает ссылку на этот объект;</li>
+        <li>Функция выполняется. Как правило, она модифицирует this (т.е. этот новый объект), добавляет методы, свойства;</li>
+        <li>Возвращается this.</li>
+      </ol>
+      <p>В результате вызова new Animal("ёжик"); получаем такой объект:</p>
+      <pre><code>animal = {
+  name: "ёжик",
+  canWalk: true
+}</code></pre>
+      <h1>Дескрипторы, геттеры и сеттеры свойств</h1><hr>
+      <p>Основной метод для управления свойствами – Object.defineProperty.</p>
+      <p>Он позволяет объявить свойство объекта и, что самое главное, тонко настроить его особые аспекты, которые никак иначе не изменить.</p>
+      <pre><code>Object.defineProperty(obj, prop, descriptor)</code></pre>
+      <ul>
+        <li>obj – объект, в котором объявляется свойство;</li>
+        <li>prop – имя свойства, которое нужно объявить или модифицировать;</li>
+        <li>descriptor – дескриптор – объект, который описывает поведение свойства:
+        <ul>
+          <li>value – значение свойства, по умолчанию undefined;</li>
+          <li>writable – значение свойства можно менять, если true. По умолчанию false;</li>
+          <li>configurable – если true, то свойство можно удалять, а также менять его в дальнейшем при помощи новых вызовов defineProperty. По умолчанию false;</li>
+          <li>enumerable – если true, то свойство просматривается в цикле for..in и методе Object.keys(). По умолчанию false;</li>
+          <li>get – функция, которая возвращает значение свойства. По умолчанию undefined;</li>
+          <li>set – функция, которая записывает значение свойства. По умолчанию undefined;</li>
+        </ul></li>
+      </ul>
+      <h2>Обычное свойство</h2>
+      <p>Два таких вызова работают одинаково:</p>
+      <pre><code>var user = {};
+
+// 1. простое присваивание
+user.name = "Вася";
+
+// 2. указание значения через дескриптор
+Object.defineProperty(user, "name", { value: "Вася", configurable: true, writable: true, enumerable: true });</code></pre>
+      <h2>Свойство-константа</h2>
+      <p>Для того, чтобы сделать свойство неизменяемым, изменим его флаги writable и configurable:</p>
+      <pre><code>"use strict";
+
+var user = {};
+
+Object.defineProperty(user, "name", {
+  value: "Вася",
+  writable: false, // запретить присвоение "user.name="
+  configurable: false // запретить удаление "delete user.name"
+});
+
+// Теперь попытаемся изменить это свойство.
+
+// в strict mode присвоение "user.name=" вызовет ошибку
+user.name = "Петя";</code></pre>
+      <h2>Свойство-функция</h2>
+      <p>Дескриптор позволяет задать свойство, которое на самом деле работает как функция. Для этого в нём нужно указать эту функцию в get.</p>
+      <p>Также можно указать функцию, которая используется для записи значения, при помощи дескриптора set.</p>
+      <pre><code>var user = {
+  firstName: "Вася",
+  surname: "Петров"
+}
+
+Object.defineProperty(user, "fullName", {
+
+  get: function() {
+    return this.firstName + ' ' + this.surname;
+  },
+
+  set: function(value) {
+      var split = value.split(' ');
+      this.firstName = split[0];
+      this.surname = split[1];
+    }
+});
+
+user.fullName = "Петя Иванов";
+alert( user.firstName ); // Петя
+alert( user.surname ); // Иванов</code></pre>
+      <h2>Указание get/set в литералах</h2>
+      <p>Если мы создаём объект при помощи синтаксиса { ... }, то задать свойства-функции можно прямо в его определении.</p>
+      <pre><code>var user = {
+  firstName: "Вася",
+  surname: "Петров",
+
+  get fullName() {
+    return this.firstName + ' ' + this.surname;
+  },
+
+  set fullName(value) {
+    var split = value.split(' ');
+    this.firstName = split[0];
+    this.surname = split[1];
+  }
+};
+
+alert( user.fullName ); // Вася Петров (из геттера)
+
+user.fullName = "Петя Иванов";
+alert( user.firstName ); // Петя  (поставил сеттер)
+alert( user.surname ); // Иванов (поставил сеттер)</code></pre>
+      <h2>Другие методы работы со свойствами</h2>
+      <pre><code>Object.defineProperties(obj, descriptors)</code></pre>
+      <p>Позволяет объявить несколько свойств сразу</p>
+      <pre><code>var user = {}
+
+Object.defineProperties(user, {
+  firstName: {
+    value: "Петя"
+  },
+
+  surname: {
+    value: "Иванов"
+  },
+
+  fullName: {
+    get: function() {
+      return this.firstName + ' ' + this.surname;
+    }
+  }
+});
+
+alert( user.fullName ); // Петя Иванов</code></pre>
+      <pre><code>Object.keys(obj), Object.getOwnPropertyNames(obj)</code></pre>
+      <p>Возвращают массив – список свойств объекта.</p>
+      <pre><code>var obj = {
+  a: 1,
+  b: 2,
+  internal: 3
+};
+
+Object.defineProperty(obj, "internal", {
+  enumerable: false
+});
+
+alert( Object.keys(obj) ); // a,b
+alert( Object.getOwnPropertyNames(obj) ); // a, b, internal</code></pre>
+      <pre><code>Object.getOwnPropertyDescriptor(obj, prop)</code></pre>
+      <p>Возвращает дескриптор для свойства obj[prop].</p>
+      <h1>Статические и фабричные методы</h1><hr>
+      <p>Методы и свойства, которые не привязаны к конкретному экземпляру объекта, называют «статическими». Их записывают прямо в саму функцию-конструктор.</p>
+      <h2>Статические свойства</h2>
+      <p>В коде ниже используются статические свойства Article.count и Article.DEFAULT_FORMAT:</p>
+      <pre><code>function Article() {
+  Article.count++;
+}
+
+Article.count = 0; // статическое свойство-переменная
+Article.DEFAULT_FORMAT = "html"; // статическое свойство-константа</code></pre>
+      <h2>Статические методы</h2>
+      <p>Создадим для Article статический метод Article.showCount():</p>
+      <pre><code>function Article() {
+  Article.count++;
+
+  //...
+}
+Article.count = 0;
+
+Article.showCount = function() {
+  alert( this.count );
+}
+
+// использование
+new Article();
+new Article();
+Article.showCount();</code></pre>
+      <p>Здесь Article.count – статическое свойство, а Article.showCount – статический метод.</p>
+      <h2>Фабричные методы</h2>
+      <p>"Фабричный статический метод" – удобная альтернатива такому конструктору. Так называется статический метод, который служит для создания новых объектов (поэтому и называется «фабричным»).</p>
+      <p>Пример встроенного фабричного метода – String.fromCharCode(code). Этот метод создает строку из кода символа:</p>
+      <pre><code>var str = String.fromCharCode(65);
+alert( str ); // 'A'</code></pre>
+      <h1>Явное указание this: "call", "apply"</h1><hr>
+      <h2>Метод call</h2>
+      <pre><code>func.call(context, arg1, arg2, ...)</code></pre>
+      <p>Вызов func.call(context, a, b...) – то же, что обычный вызов func(a, b...), но с явно указанным this(=context).</p>
+      <pre><code>var user = {
+  firstName: "Василий",
+  surname: "Петров",
+  patronym: "Иванович"
+};
+
+function showFullName(firstPart, lastPart) {
+  alert( this[firstPart] + " " + this[lastPart] );
+}
+
+// f.call(контекст, аргумент1, аргумент2, ...)
+showFullName.call(user, 'firstName', 'surname') // "Василий Петров"
+showFullName.call(user, 'firstName', 'patronym') // "Василий Иванович"</code></pre>
+      <h2>«Одалживание метода»</h2>
+      <p>При помощи call можно легко взять метод одного объекта, в том числе встроенного, и вызвать в контексте другого.</p>
+      <pre><code>function printArgs() {
+  arguments.join = [].join; // одолжили метод
+
+  var argStr = arguments.join(':');
+
+  alert( argStr ); // сработает и выведет 1:2:3
+}
+
+printArgs(1, 2, 3);</code></pre>
+      <h2>Ещё пример: [].slice.call(arguments)</h2>
+      <p>По стандарту вызов arr.slice(start, end) создаёт новый массив и копирует в него элементы массива arr от start до end. А если start и end не указаны, то копирует весь массив.</p>
+      <pre><code>function printArgs() {
+  // вызов arr.slice() скопирует все элементы из this в новый массив
+  var args = [].slice.call(arguments);
+  alert( args.join(', ') ); // args - полноценный массив из аргументов
+}
+
+printArgs('Привет', 'мой', 'мир'); // Привет, мой, мир</code></pre>
+      <h2>Метод apply</h2>
+      <p>Вызов функции при помощи func.apply работает аналогично func.call, но принимает массив аргументов вместо списка.</p>
+      <pre><code>var arr = [];
+arr.push(1);
+arr.push(5);
+arr.push(2);
+
+// получить максимум из элементов arr
+alert( Math.max.apply(null, arr) );</code></pre>
+      <h1>Привязка контекста и карринг: "bind"</h1><hr>
+      <p>Функции в JavaScript никак не привязаны к своему контексту this</p>
+      <p>Есть несколько способов привязки контекста:</p>
+      <h3>Спобоб 1. Сделать обертку</h3>
+      <pre><code>var user = {
+  firstName: "Вася",
+  sayHi: function() {
+    alert( this.firstName );
+  }
+};
+
+setTimeout(function() {
+  user.sayHi(); // Вася
+}, 1000);</code></pre>
+      <h3>Способ 2. bind для привязки контекста</h3>
+      <pre><code>function bind(func, context) {
+  return function() {
+    return func.apply(context, arguments);
+  };
+}</code></pre>
+      <pre><code>function bind(func, context) {
+  return function() {
+    return func.apply(context, arguments);
+  };
+}
+
+var user = {
+  firstName: "Вася",
+  sayHi: function() {
+    alert( this.firstName );
+  }
+};
+
+setTimeout(bind(user.sayHi, user), 1000);</code></pre>
+      <h3>Способ 3. Встроенный метод bind</h3>
+      <pre><code>var user = {
+  firstName: "Вася",
+  sayHi: function() {
+    alert( this.firstName );
+  }
+};
+
+// setTimeout( bind(user.sayHi, user), 1000 );
+setTimeout(user.sayHi.bind(user), 1000); // аналог через встроенный метод</code></pre>
+      <h1>Функции-обёртки, декораторы</h1><hr>
+      <p>Декоратор – приём программирования, который позволяет взять существующую функцию и изменить/расширить ее поведение.</p>
+      <p>Декоратор получает функцию и возвращает обертку, которая делает что-то своё «вокруг» вызова основной функции.</p>
+      <h2>Декоратор-таймер</h2>
+      <pre><code>var timers = {};
+
+// прибавит время выполнения f к таймеру timers[timer]
+function timingDecorator(f, timer) {
+  return function() {
+    var start = performance.now();
+
+    var result = f.apply(this, arguments); // (*)
+
+    if (!timers[timer]) timers[timer] = 0;
+    timers[timer] += performance.now() - start;
+
+    return result;
+  }
+}
+
+// функция может быть произвольной, например такой:
+var fibonacci = function f(n) {
+  return (n > 2) ? f(n - 1) + f(n - 2) : 1;
+}
+
+// использование: завернём fibonacci в декоратор
+fibonacci = timingDecorator(fibonacci, "fibo");
+
+// неоднократные вызовы...
+alert( fibonacci(10) ); // 55
+alert( fibonacci(20) ); // 6765
+// ...
+
+// в любой момент можно получить общее количество времени на вызовы
+alert( timers.fibo + 'мс' );</code></pre>
+      <p>Декораторы способны упростить рутинные, повторяющиеся задачи, вынести их из кода функции.</p>
+
+    </div>
+  </body>
+</html>

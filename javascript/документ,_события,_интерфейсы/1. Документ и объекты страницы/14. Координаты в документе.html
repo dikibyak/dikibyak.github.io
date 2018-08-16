@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../files/css/master.css">
+    <title>Координаты в документе</title>
+  </head>
+  <body>
+<div class="wrapper">
+
+<div class="back"><a href="../index.html">&lt;</a></div>
+<p>Система координат относительно страницы или, иначе говоря, относительно документа, начинается в левом-верхнем углу, но не окна, а именно страницы.</p>
+<p>И координаты в ней означают позицию по отношению не к окну браузера, а к документу в целом.</p>
+<h2>Получение координат</h2>
+<p>К сожалению, готовой функции для получения координат элемента относительно страницы нет. Но её можно легко написать самим.</p>
+<p>Результат <code>getCoords</code>: объект с координатами <code>{left: .., top: ..}</code></p>
+<pre><code>function getCoords(elem) { // кроме IE8-
+  var box = elem.getBoundingClientRect();
+
+  return {
+    top: box.top + pageYOffset,
+    left: box.left + pageXOffset
+  };
+
+}</code></pre>
+<h2>Устаревший метод: offset</h2>
+<p>Есть альтернативный способ нахождения координат – это пройти всю цепочку <code>offsetParent</code> от элемента вверх и сложить отступы <code>offsetLeft/offsetTop</code>.</p>
+<p>Мы разбираем его здесь с учебной целью, так как он используется лишь в старых браузерах.</p>
+<pre><code>function getOffsetSum(elem) {
+  var top = 0,
+    left = 0;
+
+  while (elem) {
+    top = top + parseInt(elem.offsetTop);
+    left = left + parseInt(elem.offsetLeft);
+    elem = elem.offsetParent;
+  }
+
+  return {
+    top: top,
+    left: left
+  };
+}</code></pre>
+<h2>Координаты на экране screenX/screenY</h2>
+<p>Координаты относительно экрана <code>screenX/screenY</code> отсчитываются от его левого-верхнего угла. Имеется в виду именно весь экран, а не окно браузера.</p>
+<p>Такие координаты могут быть полезны, например, при работе с мобильными устройствами или для открытия нового окна посередине экрана вызовом <code>window.open</code>.</p>
+<ul>
+	<li>Размеры экрана хранятся в глобальной переменной <code></code>:
+<pre><code>// общая ширина/высота
+alert( screen.width + ' x ' + screen.height );
+
+// доступная ширина/высота (за вычетом таскбара и т.п.)
+alert( screen.availWidth + ' x ' + screen.availHeight );
+
+// есть и ряд других свойств screen (см. документацию)</code></pre></li>
+	<li>Координаты левого-верхнего угла браузера на экране хранятся в <code>window.screenX</code>, <code>window.screenY</code> (не поддерживаются IE8-):
+<pre><code>alert( "Браузер находится на " + window.screenX + "," + window.screenY );</code></pre></li>
+</ul>
+
+</div>
+  </body>
+</html>

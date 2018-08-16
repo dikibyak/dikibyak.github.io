@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../files/css/master.css">
+    <title>Методы contains и compareDocumentPosition</title>
+  </head>
+  <body>
+<div class="wrapper">
+
+<div class="back"><a href="../index.html">&lt;</a></div>
+<p>Если есть два элемента, то иногда бывает нужно понять, лежит ли один из них выше другого, то есть является ли его предком.</p>
+<p>Обычные поисковые методы здесь не дают ответа, но есть два специальных.</p>
+<h2>Метод contains для проверки на вложенность</h2>
+<pre class="prettyprint"><code>var result = parent.contains(child);</code></pre>
+<p>Возвращает <code>true</code>, если <code>parent</code> содержит <code>child</code> или <code>parent == child</code>.</p>
+<h2>Метод compareDocumentPosition для порядка узлов</h2>
+<p>Бывает, что у нас есть два элемента, к примеру, <code>&ltli></code> в списке, и нужно понять, какой из них выше другого.</p>
+<p>Метод <code>compareDocumentPosition</code> – более мощный, чем <code>contains</code>, он предоставляет одновременно информацию и о содержании и об относительном порядке элементов.</p>
+<pre class="prettyprint"><code>var result = nodeA.compareDocumentPosition(nodeB);</code></pre>
+<p>Возвращаемое значение – битовая маска, биты в которой означают следующее:</p>
+<table>
+  <tr>
+    <th>Биты</th><th>Число</th><th>Значение</th>
+  </tr>
+  <tr>
+    <td>000000</td><td>0</td><td><code>nodeA</code> и <code>nodeB</code> – один и тот же узел</td>
+  </tr>
+  <tr>
+    <td>000001</td><td>4</td><td>Узлы в разных документах (или один из них не в документе)</td>
+  </tr>
+  <tr>
+    <td>000010</td><td>2</td><td><code>nodeB</code> предшествует <code>nodeA</code> (в порядке обхода документа)</td>
+  </tr>
+  <tr>
+    <td>000100</td><td>4</td><td><code>nodeA</code> предшествует <code>nodeB</code></td>
+  </tr>
+  <tr>
+    <td>001000</td><td>8</td><td><code>nodeB</code> содержит <code>nodeA</code></td>
+  </tr>
+  <tr>
+    <td>010000</td><td>16</td><td><code>nodeA</code> содержит <code>nodeB</code></td>
+  </tr>
+  <tr>
+    <td>100000</td><td>32</td><td>Зарезервировано для браузера</td>
+  </tr>
+</table>
+<p>Могут быть и сочетания битов. Примеры реальных значений:</p>
+<pre class="prettyprint"><code>&lt;p>...&lt;/p>
+&lt;ul>
+  &lt;li>1.1&lt;/li>
+&lt;/ul>
+
+&lt;script>
+  var p = document.body.children[0];
+  var ul = document.body.children[1];
+  var li = ul.children[0];
+
+  // 1. &lt;ul> находится после &lt;p>
+  alert( ul.compareDocumentPosition(p) ); // 2 = 10
+
+  // 2. &lt;p> находится до &lt;ul>
+  alert( p.compareDocumentPosition(ul) ); // 4 = 100
+
+  // 3. &lt;ul> родитель &lt;li>
+  alert( ul.compareDocumentPosition(li) ); // 20 = 10100
+
+  // 4. &lt;ul> потомок &lt;body>
+  alert( ul.compareDocumentPosition(document.body) ); // 10 = 1010
+&lt;/script></code></pre>
+<p>Более подробно:</p>
+<ol>
+  <li>Узлы не вложены один в другой, поэтому стоит только бит «предшествования», отсюда <code>10</code>.</li>
+  <li>То же самое, но обратный порядок узлов, поэтому <code>100</code>.</li>
+  <li>Здесь стоят сразу два бита: <code></code> означает, что <code>ul</code> одновременно содержит <code>li</code> и является его предшественником, то есть при прямом обходе дерева документа сначала встречается <code>ul</code>, а потом <code>li</code>.</li>
+  <li>Аналогично предыдущему, <code>1010</code> означает, что <code>document.body</code> содержит <code>ul</code> и предшествует ему.</li>
+</ol>
+
+</div>
+  </body>
+</html>

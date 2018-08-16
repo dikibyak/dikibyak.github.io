@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../files/css/master.css">
+    <title>Добавление и удаление узлов</title>
+  </head>
+  <body>
+<div class="wrapper">
+
+<div class="back"><a href="../index.html">&lt;</a></div>
+<h2>Создание элемента</h2>
+<p>Для создания элементов используются следующие методы:</p>
+<p><code>document.createElement(tag)</code> – создает новый элемент с указанным тегом:</p>
+<pre class="prettyprint"><code>var div = document.createElement('div');</code></pre>
+<p><code>document.createTextNode(text)</code> – создает новый *текстовый* узел с данным текстом:</p>
+<pre class="prettyprint"><code>var textElem = document.createTextNode('Тут был я');</code></pre>
+<h3>Создание сообщения</h3>
+<p>В нашем случае мы хотим сделать DOM-элемент <code>div</code>, дать ему классы и заполнить текстом:</p>
+<pre class="prettyprint"><code>var div = document.createElement('div');
+div.className = "alert alert-success";
+div.innerHTML = "&lt;strong>Ура!&lt;/strong> Вы прочитали это важное сообщение.";</code></pre>
+<p>После этого кода у нас есть готовый DOM-элемент. Пока что он присвоен в переменную <code>div</code>, но не виден, так как никак не связан со страницей.</p>
+<h2>Добавление элемента: appendChild, insertBefore</h2>
+<p>Чтобы DOM-узел был показан на странице, его необходимо вставить в <code>document</code>.</p>
+<p><code>parentElem.appendChild(elem)</code> – добавляет <code>elem</code> в конец дочерних элементов <code>parentElem</code>.</p>
+<p>Следующий пример добавляет новый элемент в конец <code>&lt;ol></code>:</p>
+<pre class="prettyprint"><code>&lt;ol id="list">
+  &lt;li>0&lt;/li>
+  &lt;li>1&lt;/li>
+  &lt;li>2&lt;/li>
+&lt;/ol>
+
+&lt;script>
+  var newLi = document.createElement('li');
+  newLi.innerHTML = 'Привет, мир!';
+
+  list.appendChild(newLi);
+&lt;/script></code></pre>
+<p><code>parentElem.insertBefore(elem, nextSibling)</code> – вставляет elem в коллекцию детей parentElem, перед элементом nextSibling.</p>
+<p>Следующий код вставляет новый элемент перед вторым <code>&lt;li></code>:</p>
+<pre class="prettyprint"><code>&lt;ol id="list">
+  &lt;li>0&lt;/li>
+  &lt;li>1&lt;/li>
+  &lt;li>2&lt;/li>
+&lt;/ol>
+&lt;script>
+  var newLi = document.createElement('li');
+  newLi.innerHTML = 'Привет, мир!';
+
+  list.insertBefore(newLi, list.children[1]);
+&lt;/script></code></pre>
+<h2>Клонирование узлов: cloneNode</h2>
+<p>Вызов <code>elem.cloneNode(true)</code> создаст «глубокую» копию элемента – вместе с атрибутами, включая подэлементы. Если же вызвать с аргументом <code>false</code>, то копия будет сделана без дочерних элементов. Это нужно гораздо реже.</p>
+<pre class="prettyprint"><code>&lt;style>
+.alert {
+  padding: 15px;
+  border: 1px solid #d6e9c6;
+  border-radius: 4px;
+  color: #3c763d;
+  background-color: #dff0d8;
+}
+&lt;/style>
+
+&lt;body>
+  &lt;h3>Моя страница&lt;/h3>
+&lt;/body>
+
+&lt;script>
+  var div = document.createElement('div');
+  div.className = "alert alert-success";
+  div.innerHTML = "&lt;strong>Ура!&lt;/strong> Вы прочитали это важное сообщение.";
+
+  document.body.insertBefore(div, document.body.firstChild);
+
+  // создать копию узла
+  var div2 = div.cloneNode(true);
+  // копию можно подправить
+  div2.querySelector('strong').innerHTML = 'Супер!';
+  // вставим её после текущего сообщения
+  div.parentNode.insertBefore(div2, div.nextSibling);
+&lt;/script></code></pre>
+<p>Обратите внимание на последнюю строку, которая вставляет <code>div2</code> после <code>div</code>:</p>
+<pre class="prettyprint"><code>div.parentNode.insertBefore(div2, div.nextSibling);</code></pre>
+<ol>
+	<li>Для вставки нам нужен будущий родитель. Мы, возможно, не знаем, где точно находится <code>div</code> (или не хотим зависеть от того, где он), но если нужно вставить рядом с <code>div</code>, то родителем определённо будет <code>div.parentNode</code>.</li>
+	<li>Мы хотели бы вставить после <code>div</code>, но метода <code>insertAfter</code> нет, есть только <code>insertBefore</code>, поэтому вставляем перед его правым соседом <code>div.nextSibling</code>.</li>
+</ol>
+<h2>Удаление узлов: removeChild</h2>
+<p>Для удаления узла есть два метода:</p>
+<p><code>parentElem.removeChild(elem)</code> – удаляет <code>elem</code> из списка детей <code>parentElem</code>.</p>
+<p><code>parentElem.replaceChild(newElem, elem)</code> – среди детей <code>parentElem</code> удаляет <code>elem</code> и вставляет на его место <code>newElem</code>.</p>
+<p>Оба этих метода возвращают удаленный узел, то есть <code>elem</code>. Если нужно, его можно вставить в другое место DOM тут же или в будущем.</p>
+<h4>На заметку:</h4>
+<p>Если вы хотите переместить элемент на новое место – не нужно его удалять со старого.</p>
+<p>Например, поменяем элементы местами:</p>
+<pre class="prettyprint"><code>&lt;div>Первый&lt;/div>
+&lt;div>Второй&lt;/div>
+&lt;script>
+  var first = document.body.children[0];
+  var last = document.body.children[1];
+
+  // нет необходимости в предварительном removeChild(last)
+  document.body.insertBefore(last, first); // поменять местами
+&lt;/script></code></pre>
+<h3>Удаление сообщения</h3>
+<pre class="prettyprint"><code>&lt;style>
+.alert {
+  padding: 15px;
+  border: 1px solid #d6e9c6;
+  border-radius: 4px;
+  color: #3c763d;
+  background-color: #dff0d8;
+}
+&lt;/style>
+
+&lt;body>
+  &lt;h3>Сообщение пропадёт через секунду&lt;/h3>
+&lt;/body>
+
+&lt;script>
+  var div = document.createElement('div');
+  div.className = "alert alert-success";
+  div.innerHTML = "&lt;strong>Ура!&lt;/strong> Вы прочитали это важное сообщение.";
+
+  document.body.appendChild(div);
+
+  setTimeout(function() {
+    div.parentNode.removeChild(div);
+  }, 1000);
+&lt;/script></code></pre>
+
+</div>
+  </body>
+</html>
+
+
