@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../files/css/master.css">
+    <title>Действия браузера по умолчанию"</title>
+  </head>
+  <body>
+<div class="wrapper">
+
+<div class="back"><a href="../index.html">&lt;</a></div>
+<h2>Отмена действия браузера</h2>
+<p>Есть два способа отменить действие браузера:</p>
+<ul>
+	<li>Основной способ – это воспользоваться объектом события. Для отмены действия браузера существует стандартный метод <code>event.preventDefault()</code>.</li>
+	<li>Если же обработчик назначен через <code>onсобытие</code> (не через <code>addEventListener</code>), то можно просто вернуть <code>false</code> из обработчика.</li>
+</ul>
+<p>В следующем примере при клике по ссылке переход не произойдет:</p>
+<pre><code>&lt;a href="/" onclick="return false">Нажми здесь&lt;/a>
+или
+&lt;a href="/" onclick="event.preventDefault()">здесь&lt;/a></code></pre>
+<h2>Другие действия браузера</h2>
+<p>йствий браузера по умолчанию достаточно много.</p>
+<p>Вот некоторые примеры событий, которые вызывают действие браузера:</p>
+<ul>
+	<li><code>mousedown</code> – нажатие кнопкой мыши в то время как курсор находится на тексте начинает его выделение.</li>
+	<li><code>click</code> на <code>&lt;input type="checkbox"></code> – ставит или убирает галочку.</li>
+	<li><code>submit</code> – при нажатии на <code></code> в форме данные отправляются на сервер.</li>
+	<li><code>wheel</code> – движение колёсика мыши инициирует прокрутку.</li>
+	<li><code>keydown</code> – при нажатии клавиши в поле ввода появляется символ.</li>
+	<li><code>contextmenu</code> – при правом клике показывается контекстное меню браузера.</li>
+	<li>…</li>
+</ul>
+<p>Все эти действия можно отменить, если мы хотим обработать событие исключительно при помощи JavaScript.</p>
+
+</div>
+  </body>
+</html>

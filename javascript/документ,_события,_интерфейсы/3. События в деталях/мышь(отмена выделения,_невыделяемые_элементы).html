@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../files/css/master.css">
+    <title>Мышь: отмена выделения, невыделяемые элементы</title>
+  </head>
+  <body>
+<div class="wrapper">
+<nav><a href="../index.html" class="back">&lt;</a></nav>
+
+<p>Двойной клик или нажатие с движением курсора как правило инициируют выделение текста.</p>
+<p>Если мы хотим обрабатывать эти события сами, то такое выделение – некрасиво и неудобно. В этой главе мы рассмотрим основные способы, как делать элемент невыделяемым.</p>
+
+<h2>Способ 1: отмена mousedown/selectstart</h2>
+<p>Проблема: браузер выделяет текст при движении мышью с зажатой левой кнопкой , а также при двойном клике на элемент.</p>
+<p>Чтобы избежать выделения, мы должны предотвратить действие браузера по умолчанию для события <code>selectstart</code> в IE и <code>mousedown</code> в других браузерах</p>
+<p>Полный код элемента, который обрабатывает двойной клик без выделения:</p>
+<pre><code>&lt;ul onmousedown="return false" onselectstart="return false">
+  &lt;li>Кролик. Просто кролик.&lt;/li>
+&lt;/ul></code></pre>
+
+<h2>Способ 2: снятие выделения пост-фактум</h2>
+<p>Вместо предотвращения выделения, можно его снять в обработчике события, после того, как оно уже произошло.</p>
+<p>ример со снятием выделения при двойном клике на элемент списка:</p>
+<pre><code>&lt;ul>
+  &lt;li ondblclick="clearSelection()">Выделение отменяется при двойном клике.&lt;/li>
+&lt;/ul>
+
+&lt;script>
+  function clearSelection() {
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    } else { // старый IE
+      document.selection.empty();
+    }
+  }
+&lt;/script></code></pre>
+
+<h2>Способ 3: свойство user-select</h2>
+<p>Существует нестандартное CSS-свойство <code>user-select</code>, которое делает элемент невыделяемым.</p>
+<p>Это свойство работает (с префиксом) везде, кроме IE9-:</p>
+<pre><code>&lt;style>
+  b {
+    -webkit-user-select: none;
+    /* user-select -- это нестандартное свойство */
+
+    -moz-user-select: none;
+    /* поэтому нужны префиксы */
+
+    -ms-user-select: none;
+  }
+&lt;/style>
+
+Строка до..
+&lt;div ondblclick="alert('Тест')">
+  &lt;b>Этот текст нельзя выделить (кроме IE9-)&lt;/b>
+&lt;/div>
+.. Строка после</code></pre>
+<h3>IE9-: атрибут unselectable=«on»</h3>
+<p>В IE9- нет <code>user-select</code>, но есть атрибут <code>unselectable</code>.</p>
+<p>Он отменяет выделение, но у него есть особенности:</p>
+<ol>
+	<li>Во-первых, невыделяемость не наследуется. То есть, невыделяемость родителя не делает невыделяемыми детей.</li>
+	<li>Во-вторых, текст, в отличие от <code>user-select</code>, всё равно можно выделить, если начать выделение не на самом элементе, а рядом с ним.</li>
+</ol>
+<pre><code>&lt;div ondblclick="alert('Тест')" unselectable="on" style="border:1px solid black">
+  Этот текст невыделяем в IE, &lt;em>кроме дочерних элементов&lt;/em>
+&lt;/div></code></pre>
+
+</div>
+  </body>
+</html>

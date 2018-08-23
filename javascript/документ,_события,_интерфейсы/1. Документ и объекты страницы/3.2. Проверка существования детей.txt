@@ -1,7 +1,0 @@
-// Придумайте самый короткий код для проверки, пуст ли элемент elem.
-
-if (!elem.childNodes.length) { ... }
-
-if (!elem.firstChild) { ... }
-
-if (!elem.lastChild) { ... }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<p>Сладости (нажми меня)!</p>
+  <ul>
+    <li>Торт</li>
+    <li>Пончик</li>
+    <li>Пирожное</li>
+  </ul>
+	<script type="text/javascript">
+		var p = document.querySelector('p');
+		p.style.cursor = 'pointer';
+
+		var ul = document.querySelector('ul');
+		ul.hidden = true;
+
+		p.onclick = function() {
+			ul.hidden = !ul.hidden;
+		}
+	</script>
+</body>
+</html>

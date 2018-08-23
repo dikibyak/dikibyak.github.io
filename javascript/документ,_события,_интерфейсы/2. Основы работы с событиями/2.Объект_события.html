@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../files/css/master.css">
+    <title>Объект события</title>
+  </head>
+  <body>
+<div class="wrapper">
+
+<div class="back"><a href="../index.html">&lt;</a></div>
+<h2>Свойства объекта события</h2>
+<p>Пример ниже демонстрирует использование объекта события:</p>
+<pre><code>&lt;input type="button" value="Нажми меня" id="elem">
+
+&lt;script>
+  elem.onclick = function(event) {
+    // вывести тип события, элемент и координаты клика
+    alert(event.type + " на " + event.currentTarget);
+    alert(event.clientX + ":" + event.clientY);
+  }
+&lt;/script></code></pre>
+<p>Свойства объекта <code>event</code>:</p>
+<ul>
+	<li><code>event.type</code> – тип события, в данном случае <code>click</code></li>
+	<li><code>event.currentTarget</code> – элемент, на котором сработал обработчик. Значение – в точности такое же, как и у <code>this</code>, но бывают ситуации, когда обработчик является методом объекта и его <code>this</code> при помощи <code>bind</code> привязан к этому объекту, тогда мы можем использовать <code>event.currentTarget</code>.</li>
+	<li><code>event.clientX / event.clientY</code> – Координаты курсора в момент клика (относительно окна)</li>
+</ul>
+
+</div>
+  </body>
+</html>

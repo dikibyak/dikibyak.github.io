@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    #contents {
+      padding: 5px;
+      border: 1px green solid;
+    }
+  </style>
+</head>
+
+<body>
+
+  <fieldset id="contents">
+    <legend>#contents</legend>
+    <p>
+      Как насчет почитать <a href="http://wikipedia.org">Википедию</a>, или посетить <a href="http://w3.org"><i>W3.org</i></a> и узнать про современные стандарты?
+    </p>
+  </fieldset>
+
+  <script type="text/javascript">
+    contents.onclick = function(e) {
+      var target = e.target;
+      
+      while (contents != target) {
+        if (target.tagName == 'A') {
+          confirm('Уйти на ' + target.getAttribute('href'))? true : e.preventDefault();
+          return;
+        }
+        target = target.parentNode;
+      }
+    }
+  </script>
+
+</body>
+
+</html>
