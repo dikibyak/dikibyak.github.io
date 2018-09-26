@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Загрузка документа: DOMContentLoaded, load, beforeunload, unload</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">События в деталях</a>/<a href="">Загрузка документа: DOMContentLoaded, load, beforeunload, unload</a></p></nav>
+<p>Процесс загрузки HTML-документа, условно, состоит из трёх стадий:</p>
+<ul>
+	<li><code>DOMContentLoaded</code> – браузер полностью загрузил HTML и построил DOM-дерево.</li>
+	<li><code>load</code> – браузер загрузил все ресурсы.</li>
+	<li><code>beforeunload/unload</code> – уход со страницы.</li>
+</ul>
+<p>Все эти стадии очень важны. На каждую можно повесить обработчик, чтобы совершить полезные действия:</p>
+<ul>
+	<li><code>DOMContentLoaded</code> – означает, что все DOM-элементы разметки уже созданы, можно их искать, вешать обработчики, создавать интерфейс, но при этом, возможно, ещё не догрузились какие-то картинки или стили.</li>
+	<li><code>load</code> – страница и все ресурсы загружены, используется редко, обычно нет нужды ждать этого момента.</li>
+	<li><code>beforeunload/unload</code> – можно проверить, сохранил ли посетитель изменения, уточнить, действительно ли он хочет покинуть страницу.</li>
+</ul>
+<p>Далее мы рассмотрим важные детали этих событий.</p>
+<h2>DOMContentLoaded</h2>
+<p>Событие <code>DOMContentLoaded</code> происходит на <code>document</code> и поддерживается во всех браузерах, кроме IE8-. Про поддержку аналогичного функционала в старых IE мы поговорим в конце главы.</p>
+<p>Обработчик на него вешается только через <code>addEventListener</code>.</p>
+<pre><code>&lt;script>
+  function ready() {
+    alert( 'DOM готов' );
+    alert( "Размеры картинки: " + img.offsetWidth + "x" + img.offsetHeight );
+  }
+
+  document.addEventListener("DOMContentLoaded", ready);
+&lt;/script>
+
+&lt;img id="img" src="https://js.cx/clipart/yozhik.jpg?speed=1"></code></pre>
+<h3>DOMContentLoaded и скрипты</h3>
+<p>Если в документе есть теги <code>&lt;script></code>, то браузер обязан их выполнить до того, как построит DOM. Поэтому событие <code>DOMContentLoaded</code> ждёт загрузки и выполнения таких скриптов.</p>
+<h3>DOMContentLoaded и стили</h3>
+<p>Внешние стили никак не влияют на событие <code>DOMContentLoaded</code>. Но есть один нюанс.</p>
+<p>Если после стиля идёт скрипт, то этот скрипт обязан дождаться, пока стиль загрузится:</p>
+<h3>Автозаполнение</h3>
+<p>Если на странице есть форма для ввода логина-пароля, то браузер введёт в неё запомненные значения только по <code>DOMContentLoaded</code>.</p>
+<h2>window.onload</h2>
+<p>Событие <code>onload</code> на <code>window</code> срабатывает, когда загружается вся страница, включая ресурсы на ней – стили, картинки, ифреймы и т.п.</p>
+<h2>window.onunload</h2>
+<p>Когда человек уходит со страницы или закрывает окно, на <code>window</code> срабатывает событие <code>unload</code>. В нём можно сделать что-то, не требующее ожидания, например, закрыть вспомогательные popup-окна, но отменить сам переход нельзя.</p>
+<p>Это позволяет другое событие – <code>onbeforeunload</code>, которое поэтому используется гораздо чаще.</p>
+<h2>window.onbeforeunload</h2>
+<p>Если посетитель инициировал переход на другую страницу или нажал «закрыть окно», то обработчик <code>onbeforeunload</code> может приостановить процесс и спросить подтверждение.</p>
+<pre><code>window.onbeforeunload = function() {
+  return "Данные не сохранены. Точно перейти?";
+};</code></pre>
+
+</div></body>
+
+</html>

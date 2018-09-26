@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Навигация и свойства элементов формы</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">Формы, элементы управления</a>/<a href="">Навигация и свойства элементов формы</a></p></nav>
+<h2>Псевдомассив form.elements</h2>
+<p>Элементы <code>FORM</code> можно получить по имени или номеру, используя свойство <code>document.forms[name/index]</code>.</p>
+<pre><code>document.forms.my – форма с именем 'my'
+document.forms[0] – первая форма в документе</code></pre>
+<p>Любой элемент формы <code>form</code> можно получить аналогичным образом, используя свойство <code>form.elements</code>.</p>
+<pre><code>&lt;body>
+  &lt;form name="my">
+    &lt;input name="one" value="1">
+    &lt;input name="two" value="2">
+  &lt;/form>
+
+  &lt;script>
+    var form = document.forms.my; // можно document.forms[0]
+    var elem = form.elements.one; // можно form.elements[0]
+
+    alert( elem.value ); // 1
+  &lt;/script>
+</body></code></pre>
+<p>Может быть несколько элементов с одинаковым именем. В таком случае <code>form.elements[name]</code> вернет коллекцию элементов</p>
+<pre><code>&lt;body>
+  &lt;form>
+    &lt;input type="radio" name="age" value="10">
+    &lt;input type="radio" name="age" value="20">
+  &lt;/form>
+
+  &lt;script>
+    var form = document.forms[0];
+    var elems = form.elements.age;
+
+    alert(elems[0].value); // 10, первый input
+  &lt;/script>
+&lt;/body></code></pre>
+<p>Свойство <code>elements</code> также есть у элементов <code>&lt;fieldset></code>.</p>
+<pre><code>&lt;body>
+  &lt;form>
+    &lt;fieldset name="set">
+      &lt;legend>fieldset&lt;/legend>
+      &lt;input name="text" type="text">
+    &lt;/fieldset>
+  &lt;/form>
+
+  &lt;script>
+    var form = document.forms[0];
+
+    alert( form.elements.text ); // INPUT
+    alert( form.elements.set.elements.text ); // INPUT
+  &lt;/script>
+&lt;/body></code></pre>
+<h2>Ссылка на форму element.form</h2>
+<p>По элементу можно получить его форму, используя свойство <code>element.form</code>.</p>
+<pre><code>&lt;body>
+  &lt;form>
+    &lt;input type="text" name="surname">
+  &lt;/form>
+
+  &lt;script>
+    var form = document.forms[0];
+    var elem = form.elements.surname;
+
+    alert(elem.form == form); // true
+  &lt;/script>
+&lt;/body></code></pre>
+<h2>Элемент label</h2>
+<p>Клик на <code>label</code> засчитывается как фокусировка или клик на элементе формы, к которому он относится.</p>
+<p>Есть два способа показать, какой элемент относится к <code>label</code>:</p>
+<ol>
+	<li>Дать метке атрибут <code>for</code>, равный <code>id</code> соответствующего <code>input</code>:
+		<pre><code>&lt;label for="agree">Согласен с правилами&lt;/label>&lt;input id="agree" type="checkbox"></code></pre></li>
+	<li>Завернуть элемент в label. В этом случае можно обойтись без дополнительных атрибутов:
+		<pre><code>&lt;label>Кликни меня &lt;input type="checkbox">&lt;/label></code></pre></li>
+</ol>
+<h2>Элементы input и textarea</h2>
+<p>Для большинства типов <code>input</code> значение ставится/читается через свойство <code>value</code>.</p>
+<pre><code>input.value = "Новое значение";
+textarea.value = "Новый текст";</code></pre>
+<h2>Элементы select и option</h2>
+<p>Селект в JavaScript можно установить двумя путями: поставив значение <code>select.value</code>, либо установив свойство <code>select.selectedIndex</code> в номер нужной опции.</p>
+<pre><code>select.selectedIndex = 0; // первая опция</code></pre>
+<p>Установка <code>selectedIndex = -1</code> очистит выбор.</p>
+<p>Список элементов-опций доступен через <code>select.options</code>.</p>
+<p>Если <code>select</code> допускает множественный выбор (атрибут <code>multiple</code>), то значения можно получить/установить, сделав цикл по <code>select.options</code>. При этом выбранные опции будут иметь свойство <code>option.selected = true</code>.</p>
+<pre><code>&lt;form name="form">
+  &lt;select name="genre" multiple>
+    &lt;option value="blues" selected>Мягкий блюз&lt;/option>
+    &lt;option value="rock" selected>Жёсткий рок&lt;/option>
+    &lt;option value="classic">Классика&lt;/option>
+  &lt;/select>
+&lt;/form>
+
+&lt;script>
+var form = document.forms[0];
+var select = form.elements.genre;
+
+for (var i = 0; i < select.options.length; i++) {
+  var option = select.options[i];
+  if(option.selected) {
+    alert( option.value );
+  }
+}
+&lt;/script></code></pre>
+<h3>Дополнительные свойства option</h3>
+<p><code>selected</code> – выбрана ли опция</p>
+<p><code>index</code> – номер опции в списке селекта</p>
+<p><code>text</code> – текстовое содержимое опции (то, что видит посетитель)</p>
+
+</div></body>
+
+</html>

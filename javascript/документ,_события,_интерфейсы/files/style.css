@@ -1,0 +1,93 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-size: 18px;
+	font-family: 'Liberation Serif';
+	background: #f6f6f6;
+	color: #272727;
+	overflow-y: scroll;
+}
+
+.wrapper {
+	max-width: 1000px;
+	margin: auto;
+	background: white;
+	border-top: 0px solid white;
+	border-bottom: 1px solid white;
+}
+
+p,h1,h2,h3,h4,pre,ul,ol,table {
+	margin: 6px 10px;
+}
+
+li {
+	margin: 0 20px;
+}
+
+pre {
+	font-size: 0;
+	background: #f4f4f4;
+	border: 0 solid black;
+	border-radius: 5px;
+	padding: 5px 8px;
+}
+
+code {
+	font-size: 16px;
+}
+
+nav {
+	border-bottom: 10px solid #f6f6f6;
+	border-top: 10px solid #f6f6f6;
+}
+
+nav a {
+	color: #272727;
+	text-decoration: none;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+nav a:hover {
+	border-bottom: 1px solid black;
+	color: black;
+}
+
+table {
+	text-align: left;
+	border-collapse: collapse;
+}
+
+td, th {
+	border: 1px solid gray;
+	padding: 4px;
+}
+
+nav#links li {
+	list-style-type: none;
+	margin: 0;
+}
+
+nav#links ol {
+	border-left: 2px solid gray;
+	border-right: 2px solid gray;
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	border-radius: 5px;
+	margin: 0;
+}
+
+nav#links a {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 10px;
+	display: block;
+}
+
+nav#links a:hover {
+	background: #f6f6f6;
+	color: black;
+}

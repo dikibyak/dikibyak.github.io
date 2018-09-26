@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Загрузка скриптов, картинок, фреймов: onload и onerror</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">События в деталях</a>/<a href="">Загрузка скриптов, картинок, фреймов: onload и onerror</a></p></nav>
+<p>Браузер позволяет отслеживать загрузку внешних ресурсов – скриптов, ифреймов, картинок и других.</p>
+<p>Для этого есть два события:</p>
+<ul>
+	<li><code>onload</code> – если загрузка успешна.</li>
+	<li><code>onerror</code> – если при загрузке произошла ошибка.</li>
+</ul>
+<h2>Загрузка SCRIPT</h2>
+<p>Рассмотрим следующую задачу.</p>
+<p>В браузере работает сложный интерфейс и, чтобы создать очередной компонент, нужно загрузить скрипт с сервера.</p>
+<pre><code>var script = document.createElement('script');
+script.src = "my.js";
+
+document.body.appendChild(script);</code></pre>
+<p>…Но как после подгрузки выполнить функцию, которая объявлена в этом скрипте? Для этого нужно отловить момент окончания загрузки и выполнения тега <code>&lt;script></code>.</p>
+<h3>script.onload</h3>
+<p>Главным помощником станет событие <code>onload</code>. Оно сработает, когда скрипт загрузился и выполнился.</p>
+<pre><code>var script = document.createElement('script');
+script.src = "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"
+document.body.appendChild(script);
+
+script.onload = function() {
+  // после выполнения скрипта становится доступна функция _
+  alert( _ ); // её код
+}</code></pre>
+<h3>script.onerror</h3>
+<p>Любые ошибки загрузки (но не выполнения) скрипта отслеживаются обработчиком <code>onerror</code>.</p>
+<pre><code>var script = document.createElement('script');
+script.src = "https://example.com/404.js"
+document.body.appendChild(script);
+
+script.onerror = function() {
+  alert( "Ошибка: " + this.src );
+};</code></pre>
+
+</div></body>
+
+</html>

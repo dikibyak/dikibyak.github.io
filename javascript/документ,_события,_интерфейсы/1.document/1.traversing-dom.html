@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Навигация по DOM-элементам</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../events-and-interface.html">Документ и объекты страницы</a>/<a href="">Навигация по DOM-элементам</a></p></nav>
+<img src="../files/img/dom-links.png">
+<h2>Соседи и родитель</h2>
+<p>Доступ к элементам слева и справа данного можно получить по ссылкам <code>previousSibling / nextSibling</code>.</p>
+<p>Родитель доступен через <code>parentNode</code>. Если долго идти от одного элемента к другому, то рано или поздно дойдёшь до корня DOM, то есть до <code>document.documentElement</code>, а затем и <code>document</code>.</p>
+<h2>Навигация только по элементам</h2>
+<img src="../files/img/dom-links-elements.png">
+<h2>Особые ссылки для таблиц</h2>
+<p>У конкретных элементов DOM могут быть свои дополнительные ссылки для большего удобства навигации.</p>
+<p>Здесь мы рассмотрим таблицу, так как это важный частный случай и просто для примера.</p>
+<p><code>TABLE</code></p>
+<ul>
+	<li><code>table.rows</code> – коллекция строк TR таблицы.</li>
+	<li><code>table.caption/tHead/tFoot</code> – ссылки на элементы таблицы CAPTION, THEAD, TFOOT.</li>
+	<li><code>table.tBodies</code> – коллекция элементов таблицы TBODY, по спецификации их может быть несколько.</li>
+</ul>
+<p><code>THEAD/TFOOT/TBODY</code></p>
+<ul>
+	<li><code>tbody.rows</code> – коллекция строк TR секции.</li>
+</ul>
+<p><code>TR</code></p>
+<ul>
+	<li><code>tr.cells</code> – коллекция ячеек TD/TH.</li>
+	<li><code>tr.sectionRowIndex</code> – номер строки в текущей секции THEAD/TBODY.</li>
+	<li><code>tr.rowIndex</code> – номер строки в таблице.</li>
+</ul>
+<p><code>TD/TH</code></p>
+<ul>
+	<li><code>td.cellIndex</code> – номер ячейки в строке.</li>
+</ul>
+<p>Пример использования:</p>
+<pre><code>&lt;table>
+  &lt;tr>
+    &lt;td>один&lt;/td> &lt;td>два&lt;/td>
+  &lt;/tr>
+  &lt;tr>
+    &lt;td>три&lt;/td>  &lt;td>четыре&lt;/td>
+  &lt;/tr>
+&lt;/table>
+
+&lt;script>
+var table = document.body.children[0];
+
+alert( table.rows[0].cells[0].innerHTML ) // "один"
+&lt;/script></code></pre>
+
+</div></body>
+
+</html>

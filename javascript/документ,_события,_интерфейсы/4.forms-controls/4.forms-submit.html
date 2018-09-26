@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Формы: отправка, событие и метод submit</title>
+</head>
+
+<body><div class="wrapper">
+	
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">Формы, элементы управления</a>/<a href="">Формы: отправка, событие и метод submit</a></p></nav>
+<h2>Событие submit</h2>
+<p>Чтобы отправить форму на сервер, у посетителя есть два способа:</p>
+<ol>
+  <li>Первый – это нажать кнопку &lt;input type="submit"> или &lt;input type="image">.</li>
+  <li>Второй – нажать Enter, находясь на каком-нибудь поле.</li>
+</ol>
+<p>Какой бы способ ни выбрал посетитель – будет сгенерировано событие <code>submit</code>. Обработчик в нём может проверить данные и, если они неверны, то вывести ошибку и сделать <code>event.preventDefault()</code> – тогда форма не отправится на сервер</p>
+<h2>Метод submit</h2>
+<p>Чтобы отправить форму на сервер из JavaScript – нужно вызвать на элементе формы метод <code>form.submit()</code>.</p>
+<p>При этом само событие <code>submit</code> не генерируется. Предполагается, что если программист вызывает метод <code>form.submit()</code>, то он выполнил все проверки.</p>
+
+</div></body>
+
+</html>

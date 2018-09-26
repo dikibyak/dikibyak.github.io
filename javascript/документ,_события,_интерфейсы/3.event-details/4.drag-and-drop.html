@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Мышь: Drag'n'Drop</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">События в деталях</a>/<a href="">Мышь: Drag'n'Drop</a></p></nav>
+<p>Drag’n’Drop – это возможность захватить мышью элемент и перенести его.</p>
+<h2>Алгоритм Drag’n’Drop</h2>
+<p>Основной алгоритм Drag’n’Drop выглядит так:</p>
+<ol>
+	<li>Отслеживаем нажатие кнопки мыши на переносимом элементе при помощи события <code>mousedown</code>.</li>
+	<li>При нажатии – подготовить элемент к перемещению.</li>
+	<li>Далее отслеживаем движение мыши через mousemove и передвигаем переносимый элемент на новые координаты путём смены <code>left/top</code> и <code>position:absolute</code>.</li>
+	<li>При отпускании кнопки мыши, то есть наступлении события <code>mouseup</code> – остановить перенос элемента и произвести все действия, связанные с окончанием Drag’n’Drop.</li>
+</ol>
+<p>В следующем примере эти шаги реализованы для переноса мяча:</p>
+<pre><code>var ball = document.getElementById('ball');
+
+ball.onmousedown = function(e) { // 1. отследить нажатие
+
+  // подготовить к перемещению
+  // 2. разместить на том же месте, но в абсолютных координатах
+  ball.style.position = 'absolute';
+  moveAt(e);
+  // переместим в body, чтобы мяч был точно не внутри position:relative
+  document.body.appendChild(ball);
+
+  ball.style.zIndex = 1000; // показывать мяч над другими элементами
+
+  // передвинуть мяч под координаты курсора
+  // и сдвинуть на половину ширины/высоты для центрирования
+  function moveAt(e) {
+    ball.style.left = e.pageX - ball.offsetWidth / 2 + 'px';
+    ball.style.top = e.pageY - ball.offsetHeight / 2 + 'px';
+  }
+
+  // 3, перемещать по экрану
+  document.onmousemove = function(e) {
+    moveAt(e);
+  }
+
+  // 4. отследить окончание переноса
+  ball.onmouseup = function() {
+    document.onmousemove = null;
+    ball.onmouseup = null;
+  }
+}</code></pre>
+<p>Попробуйте перенести мяч мышкой и вы увидите описанное, довольно-таки странное, поведение.</p>
+<p>Это потому, что браузер имеет свой собственный Drag’n’Drop, который автоматически запускается и вступает в конфликт с нашим. Это происходит именно для картинок и некоторых других элементов.</p>
+<p>Его нужно отключить:</p>
+<pre><code>ball.ondragstart = function() {
+  return false;
+};</code></pre>
+<p>Ещё одна особенность правильного Drag’n’Drop – событие <code>mousemove</code> отслеживается на <code>document</code>, а не на <code>ball</code>.</p>
+<h2>Правильное позиционирование</h2>
+<p>В примерах выше мяч позиционируется в центре под курсором мыши:</p>
+<pre><code>self.style.left = e.pageX - ball.offsetWidth / 2 + 'px';
+self.style.top = e.pageY - ball.offsetHeight / 2 + 'px';</code></pre>
+<p>Если поставить <code>left/top</code> ровно в <code>pageX/pageY</code>, то мячик прилипнет верхним-левым углом к курсору мыши. Будет некрасиво. Поэтому мы сдвигаем его на половину высоты/ширины, чтобы был центром под мышью. Уже лучше.</p>
+<p>Но не идеально. В частности, в самом начале переноса, особенно если мячик «взят» за край – он резко «прыгает» центром под курсор мыши.</p>
+<p>Для правильного переноса необходимо, чтобы изначальный сдвиг курсора относительно элемента сохранялся.</p>
+<ol>
+	<li>Когда человек нажимает на мячик mousedown – курсор сдвинут относительно левого-верхнего угла мяча на расстояние, которое мы обозначим <code>shiftX/shiftY</code>. И нужно при переносе сохранить этот сдвиг.
+		<pre><code>// onmousedown
+shiftX = e.pageX - getCoords(ball).left;
+shiftY = e.pageY - getCoords(ball).top;</code></pre></li>
+	<li>Далее при переносе мяча мы располагаем его <code>left/top</code> с учетом сдвига, то есть вот так:
+		<pre><code>// onmousemove
+ball.style.left = e.pageX - shiftX + 'px';
+ball.style.top = e.pageY - shiftY + 'px';</code></pre></li>
+</ol>
+<p>Итоговый код с правильным позиционированием:</p>
+<pre><code>var ball = document.getElementById('ball');
+
+ball.onmousedown = function(e) {
+
+  var coords = getCoords(ball);
+  var shiftX = e.pageX - coords.left;
+  var shiftY = e.pageY - coords.top;
+
+  ball.style.position = 'absolute';
+  document.body.appendChild(ball);
+  moveAt(e);
+
+  ball.style.zIndex = 1000; // над другими элементами
+
+  function moveAt(e) {
+    ball.style.left = e.pageX - shiftX + 'px';
+    ball.style.top = e.pageY - shiftY + 'px';
+  }
+
+  document.onmousemove = function(e) {
+    moveAt(e);
+  };
+
+  ball.onmouseup = function() {
+    document.onmousemove = null;
+    ball.onmouseup = null;
+  };
+
+}
+
+ball.ondragstart = function() {
+  return false;
+};
+
+function getCoords(elem) {   // кроме IE8-
+  var box = elem.getBoundingClientRect();
+  return {
+    top: box.top + pageYOffset,
+    left: box.left + pageXOffset
+  };
+}
+
+}</code></pre>
+
+</div></body>
+
+</html>

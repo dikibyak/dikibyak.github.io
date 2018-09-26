@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Изменение: change, input, cut, copy, paste</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">Формы, элементы управления</a>/<a href="">Изменение: change, input, cut, copy, paste</a></p></nav>
+<h2>Событие change</h2>
+<p>Событие <code>change</code> происходит по окончании изменения значения элемента формы, когда это изменение зафиксировано.</p>
+<p>Для текстовых элементов это означает, что событие произойдёт не при каждом вводе, а при потере фокуса.</p>
+<p>Например, пока вы набираете что-то в текстовом поле ниже – события нет. Но как только вы уведёте фокус на другой элемент, например, нажмёте кнопку – произойдет событие <code>onchange</code>.</p>
+<pre><code>&lt;input type="text" onchange="alert(this.value)">
+&lt;input type="button" value="Кнопка"></code></pre>
+<p>Для остальных же элементов: <code>select</code>, <code>input type=checkbox/radio</code> оно срабатывает сразу при выборе значения.</p>
+<h2>Событие input</h2>
+<p>обытие <code>input</code> срабатывает тут же при изменении значения текстового элемента и поддерживается всеми браузерами, кроме <code>IE8-</code>.</p>
+<pre><code>&lt;input type="text"> oninput: &lt;span id="result">&lt;/span>
+&lt;script>
+  var input = document.body.children[0];
+
+  input.oninput = function() {
+    document.getElementById('result').innerHTML = input.value;
+  };
+&lt;/script></code></pre>
+<p>В современных браузерах <code>oninput</code> – самое главное событие для работы с элементом формы. Именно его, а не <code>keydown/keypress</code> следует использовать.</p>
+<h2>События cut, copy, paste</h2>
+<p>Эти события используются редко. Они происходят при вырезании/вставке/копировании значения.</p>
+<pre><code>&lt;input type="text" id="input"> event: &lt;span id="result">&lt;/span>
+&lt;script>
+  input.oncut = input.oncopy = input.onpaste = function(event) {
+    result.innerHTML = event.type + ' ' + input.value;
+    return false;
+  };
+&lt;/script></code></pre>
+
+</div></body>
+
+</html>

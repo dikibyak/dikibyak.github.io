@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Клавиатура: keyup, keydown, keypress</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">События в деталях</a>/<a href="">Клавиатура: keyup, keydown, keypress</a></p></nav>
+<h2>События keydown и keyup</h2>
+<p>События <code>keydown/keyup</code> происходят при нажатии/отпускании клавиши и позволяют получить её скан-код в свойстве <code>keyCode</code>.</p>
+<p>Скан-код клавиши одинаков в любой раскладке и в любом регистре.</p>
+<p>В действии:</p>
+<pre><code>&lt;input onkeydown="this.nextSibling.innerHTML = event.keyCode"> &lt;b>&lt;/b></code></pre>
+<h2>Событие keypress</h2>
+<p>Событие <code>keypress</code> возникает сразу после <code>keydown</code>, если нажата символьная клавиша, т.е. нажатие приводит к появлению символа.</p>
+<p>Событие <code>keypress</code> позволяет получить код символа. В отличие от скан-кода, он специфичен именно для символа и различен для "z" и "я".</p>
+<p>Код символа хранится в свойствах: <code>charCode</code> и <code>which</code>.</p>
+<h3>Получение символа в keypress</h3>
+<p>Кросс-браузерная функция для получения символа из события <code>keypress</code>:</p>
+<pre><code>// event.type должен быть keypress
+function getChar(event) {
+  if (event.which == null) { // IE
+    if (event.keyCode < 32) return null; // спец. символ
+    return String.fromCharCode(event.keyCode)
+  }
+
+  if (event.which != 0 && event.charCode != 0) { // все кроме IE
+    if (event.which < 32) return null; // спец. символ
+    return String.fromCharCode(event.which); // остальные
+  }
+
+  return null; // спец. символ
+}</code></pre>
+<h2>Отмена пользовательского ввода</h2>
+<p>Появление символа можно предотвратить, если отменить действие браузера на <code>keydown/keypress</code>:</p>
+<pre><code>&lt;input onkeydown="return false" type="text" size="30">
+&lt;input onkeypress="return false" type="text" size="30"></code></pre>
+<h3>Отмена любых действий</h3>
+<p>Отменять можно не только символ, а любое действие клавиш.</p>
+<ul>
+	<li>При отмене Backspace – символ не удалится.</li>
+	<li>При отмене PageDown – страница не прокрутится.</li>
+	<li>При отмене Tab – курсор не перейдёт на следующее поле.</li>
+</ul>
+<h3>Демо: перевод символа в верхний регистр</h3>
+<p>В примере ниже действие браузера отменяется с помощью <code>return false</code>, а вместо него в <code>input</code> добавляется значение в верхнем регистре:</p>
+<pre><code>&lt;input id="only-upper" type="text" size="2">
+&lt;script>
+  document.getElementById('only-upper').onkeypress = function(e) {
+    // спец. сочетание - не обрабатываем
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+    var char = getChar(e);
+
+    if (!char) return; // спец. символ - не обрабатываем
+
+    this.value = char.toUpperCase();
+
+    return false;
+  };
+&lt;/script></code></pre>
+
+</div></body>
+
+</html>

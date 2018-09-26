@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Фокусировка: focus/blur</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">Формы, элементы управления</a>/<a href="">Фокусировка: focus/blur</a></p></nav>
+<h2>События focus/blur</h2>
+<p>Событие <code>focus</code> вызывается тогда, когда пользователь фокусируется на элементе, а <code>blur</code> – когда фокус исчезает, например посетитель кликает на другом месте экрана.</p>
+<p>Давайте сразу посмотрим на них в деле, используем для проверки («валидации») введённых в форму значений.</p>
+<p>В примере ниже:</p>
+<ul>
+	<li>Обработчик <code>onblur</code> проверяет, что в поле введено число, если нет – показывает ошибку.</li>
+	<li>Обработчик <code>onfocus</code>, если текущее состояние поля ввода – «ошибка» – скрывает её (потом при <code>onblur</code> будет повторная проверка).</li>
+</ul>
+<p>В примере ниже, если набрать что-нибудь в поле «возраст» и завершить ввод, нажав <code>Tab</code> или кликнув в другое место страницы, то введённое значение будет автоматически проверено:</p>
+<pre><code>&lt;style> .error { border-color: red; } &lt;/style>
+
+Введите ваш возраст: &lt;input type="text" id="input">
+
+&lt;div id="error">&lt;/div>
+
+&lt;script>
+input.onblur = function() {
+  if (isNaN(this.value)) { // введено не число
+    // показать ошибку
+    this.className = "error";
+    error.innerHTML = 'Вы ввели не число. Исправьте, пожалуйста.'
+  }
+};
+
+input.onfocus = function() {
+  if (this.className == 'error') { // сбросить состояние "ошибка", если оно есть
+    this.className = "";
+    error.innerHTML = "";
+  }
+};
+&lt;/script></code></pre>
+<h2>Методы focus/blur</h2>
+<p>Методы с теми же названиями переводят/уводят фокус с элемента.</p>
+<p>Для примера модифицируем пример выше, чтобы при неверном вводе посетитель просто не мог уйти с элемента:</p>
+<pre><code>&lt;style> .error { background: red; } &lt;/style>
+
+&lt;div>Возраст: &lt;input type="text" id="age">&lt;/div>
+&lt;div>Имя: &lt;input type="text">&lt;/div>
+
+&lt;script>
+  age.onblur = function() {
+    if (isNaN(this.value)) { // введено не число
+      // показать ошибку
+      this.classList.add("error");
+      //... и вернуть фокус обратно
+      age.focus();
+    } else {
+      this.classList.remove("error");
+    }
+  };
+&lt;/script></code></pre>
+<h2>HTML5 и CSS3 вместо focus/blur</h2>
+<h3>Подсветка при фокусировке</h3>
+<pre><code>&lt;style>
+input:focus {
+  background: #FA6;
+  outline: none;  /* убрать рамку */
+}
+&lt;/style>
+&lt;input type="text"></code></pre>
+<h3>Автофокус</h3>
+<p>При загрузке страницы, если на ней существует элемент с атрибутом <code>autofocus</code> – браузер автоматически фокусируется на этом элементе.</p>
+<pre><code>&lt;input type="text" name="search" autofocus></code></pre>
+<h3>Плейсхолдер</h3>
+<p>Плейсхолдер – это значение-подсказка внутри <code>INPUT</code>, которое автоматически исчезает при фокусировке и существует, пока посетитель не начал вводить текст.</p>
+<pre><code>&lt;input type="text" placeholder="E-mail"></code></pre>
+<h2>Разрешаем фокус на любом элементе: tabindex</h2>
+<p>В HTML есть атрибут <code>tabindex</code>.</p>
+<p>Его основной смысл – это указать номер элемента при переборе клавишей <code>Tab</code>.</p>
+<p>То есть, если есть два элемента, первый имеет <code>tabindex="1"</code>, а второй <code>tabindex="2"</code>, то нажатие <code>Tab</code> при фокусе на первом элементе – переведёт его на второй.</p>
+<p>Исключением являются специальные значения:</p>
+<ul>
+	<li><code>tabindex="0"</code> делает элемент всегда последним.</li>
+	<li><code>tabindex="-1"</code> означает, что клавиша <code>Tab</code> будет элемент игнорировать.</li>
+</ul>
+Любой элемент поддерживает фокусировку, если у него есть <code>tabindex</code>.
+<p>В примере ниже есть список элементов. Кликните на любой из них и нажмите <code>Tab</code>.</p>
+<pre><code>&lt;ul>
+  &lt;li tabindex="1">Один&lt;/li>
+  &lt;li tabindex="0">Ноль&lt;/li>
+  &lt;li tabindex="2">Два&lt;/li>
+  &lt;li tabindex="-1">Минус один&lt;/li>
+&lt;/ul>
+
+&lt;style>
+  li { cursor: pointer; }
+  :focus { outline: 1px dashed green; }
+&lt;/style></code></pre>
+
+</div></body>
+
+</html>

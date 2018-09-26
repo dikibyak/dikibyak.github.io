@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Прокрутка: событие scroll</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">События в деталях</a>/<a href="">Прокрутка: событие scroll</a></p></nav>
+<p>Событие <code>onscroll</code> происходит, когда элемент прокручивается.</p>
+<p>В отличие от события <code>onwheel</code> (колесико мыши), его могут генерировать только прокручиваемые элементы или окно <code>window</code>. Но зато оно генерируется всегда, при любой прокрутке, не обязательно «мышиной».</p>
+<p>Например, следующая функция при прокрутке окна выдает количество прокрученных пикселей:</p>
+<pre><code>window.onscroll = function() {
+  var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+  document.getElementById('showScroll').innerHTML = scrolled + 'px';
+}</code></pre>
+<ul>
+	<li>Показ дополнительных элементов навигации при прокрутке.</li>
+	<li>Подгрузка и инициализация элементов интерфейса, ставших видимыми после прокрутки.</li>
+</ul>
+
+</div></body>
+
+</html>

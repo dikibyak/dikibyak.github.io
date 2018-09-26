@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Мышь: движение mouseover/out, mouseenter/leave</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../event-details.html">События в деталях</a>/<a href="">Мышь: движение mouseover/out, mouseenter/leave</a></p></nav>
+<h2>События mouseover/mouseout, свойство relatedTarget</h2>
+<p>Событие <code>mouseover</code> происходит, когда мышь появляется над элементом, а <code>mouseout</code> – когда уходит из него.</p>
+<p>При этом мы можем узнать, с какого элемента пришла (или на какой ушла) мышь, используя дополнительное свойство объекта события <code>relatedTarget</code>.</p>
+<p>Например, в обработчике события <code>mouseover</code>:</p>
+<ul>
+  <li><code>event.target</code> – элемент, на который пришла мышь, то есть на котором возникло событие.</li>
+  <li><code>event.relatedTarget</code> – элемент, с которого пришла мышь.</li>
+</ul>
+<p>Для <code>mouseout</code> всё наоборот:</p>
+<ul>
+  <li><code>event.target</code> – элемент, с которого ушла мышь, то есть на котором возникло событие.</li>
+  <li><code>event.relatedTarget</code> – элемент, на который перешла мышь.</li>
+</ul>
+<h2>Частота событий</h2>
+<p>События <code>mousemove</code> и <code>mouseover/mouseout</code> срабатывают так часто, насколько это позволяет внутренняя система взаимодействия с мышью браузера.</p>
+<p>Это означает, что если посетитель двигает мышью быстро, то DOM-элементы, через которые мышь проходит на большой скорости, могут быть пропущены.</p>
+<h2>«Лишний» mouseout при уходе на потомка</h2>
+<p>При переходе на потомка срабатывает <code>mouseout</code> на родителе.</p>
+<p>У обработчиков создаётся впечатление, что курсор ушёл <code>mouseout</code> с родителя, а затем тут же перешёл <code>mouseover</code> на него (за счёт всплытия <code>mouseover</code> с потомка).</p>
+<h2>События mouseenter и mouseleave</h2>
+<p>События <code>mouseenter/mouseleave</code> похожи на <code>mouseover/mouseout</code>. Они тоже срабатывают, когда курсор заходит на элемент и уходит с него, но с двумя отличиями.</p>
+<ol>
+  <li>Не учитываются переходы внутри элемента.</li>
+  <li>События <code>mouseenter/mouseleave</code> не всплывают.</li>
+</ol>
+
+</div></body>
+
+</html>

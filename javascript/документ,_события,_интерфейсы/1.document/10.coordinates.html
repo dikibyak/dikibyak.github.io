@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link href="../files/style.css" rel="stylesheet">
+	<title>Координаты в окне</title>
+</head>
+
+<body><div class="wrapper">
+
+<nav><p><a href="../index.html">Документ, события, интерфейсы</a>/<a href="../events-and-interface.html">Документ и объекты страницы</a>/<a href="">Координаты в окне</a></p></nav>
+<p>Для того, чтобы поместить один элемент рядом с другим на странице, а также двигать его произвольным образом, к примеру, рядом с указателем мыши – используются координаты.</p>
+<h2>getBoundingClientRect()</h2>
+<p>Метод <code>elem.getBoundingClientRect()</code> возвращает координаты элемента, под которыми понимаются размеры «воображаемого прямоугольника», который охватывает весь элемент.</p>
+<p>Координаты возвращаются в виде объекта со свойствами:</p>
+<ul>
+	<li><code>top</code> – Y-координата верхней границы элемента,</li>
+	<li><code>left</code> – X-координата левой границы,</li>
+	<li><code>right</code> – X-координата правой границы,</li>
+	<li><code>bottom</code> – Y-координата нижней границы.</li>
+</ul>
+<img src="../files/img/coords.png">
+<p>Координаты относительно окна не учитывают прокрутку, они высчитываются от границ текущей видимой области.</p>
+<h2>elementFromPoint(x, y)</h2>
+<p>Возвращает элемент, который находится на координатах <code>(x, y)</code> относительно окна.</p>
+<p>Например, код ниже выделяет и выводит тег у элемента, который сейчас в середине окна:</p>
+<pre><code>var centerX = document.documentElement.clientWidth / 2;
+var centerY = document.documentElement.clientHeight / 2;
+
+var elem = document.elementFromPoint(centerX, centerY);
+
+elem.style.background = "red";
+alert( elem.tagName );
+elem.style.background = "";</code></pre>
+<p>Аналогично предыдущему методу, используются координаты относительно окна, так что, в зависимости от прокрутки страницы, в центре может быть разный элемент.</p>
+
+</div></body>
+
+</html>
