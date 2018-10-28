@@ -28,16 +28,9 @@
 &lt;/script></code></pre>
 <h2>Отмена действия по умолчанию</h2>
 <p>На сгенерированном событии, как и на встроенном браузерном, обработчик может вызвать метод <code>event.preventDefault()</code>. Тогда <code>dispatchEvent</code> возвратит <code>false</code>.</p>
-<pre><code>&lt;pre id="rabbit">
-  |\   /|
-   \|_|/
-   /. .\
-  =\_Y_/=
-   {>o<}
-&lt;/pre>
+<pre><code>&lt;p id="rabbit">text&lt;/p>
 
 &lt;script>
-
   function hide() {
     var event = new Event("hide", {
       cancelable: true
@@ -57,7 +50,6 @@
 
   // прячемся через 2 секунды
   setTimeout(hide, 2000);
-
 &lt;/script></code></pre>
 <h3>Как отличить реальное нажатие от скриптового?</h3>
 <p>Единственный способ, которым код может отличить реальное нажатие от программного, является проверка свойства <code>event.isTrusted</code>.</p>
@@ -77,12 +69,12 @@ event.clientY = 100;</code></pre>
 <pre><code>&lt;h1 id="elem">Привет от скрипта!&lt;/h1>
 
 &lt;script>
-  document.addEventListener("hello", function(event) { // (1)
+  document.addEventListener("hello", function(event) {
     alert("Привет");
-    event.preventDefault();  // (2)
+    event.preventDefault();
   }, false);
 
-  var event = new Event("hello", {bubbles: true, cancelable: true}); // (3)
+  var event = new Event("hello", {bubbles: true, cancelable: true});
   if (elem.dispatchEvent(event) === false) {
     alert('Событие было отменено preventDefault');
   }
